@@ -1,0 +1,5 @@
+{
+  "name": "Chain Hook Wallet",
+  "description": "A multi-currency wallet with OAuth authorization, real-time exchange rate tracking, and secure payment integrations.",
+  "requestFramePermissions": []
+}
