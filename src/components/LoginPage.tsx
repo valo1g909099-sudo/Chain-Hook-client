@@ -46,7 +46,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
         onLogin();
       }
     } catch {
-      
+
     }
   };
 
@@ -77,8 +77,8 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
   );
 
   const StatsRow = () => (
-    <div className="flex flex-wrap items-center justify-between gap-4 text-zinc-500 text-xs">
-      <div className="flex gap-6">
+    <div className="flex items-center justify-between gap-6 lg:gap-10 text-zinc-500 text-xs w-full flex-nowrap">
+      <div className="flex gap-6 lg:gap-8 shrink-0">
         <div>
           <div className="text-white font-medium text-sm">100%</div>
           <div className="text-[10px] text-zinc-500 uppercase tracking-wider">API Uptime</div>
@@ -92,7 +92,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
           <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Volume Managed</div>
         </div>
       </div>
-      <div>
+      <div className="shrink-0 whitespace-nowrap">
         <span>© 2024 Chain Hook Inc.</span>
       </div>
     </div>
