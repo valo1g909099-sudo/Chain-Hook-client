@@ -7,25 +7,24 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 interface LoginPermissionPageProps {
-  /** The app / client name requesting login */
+  
   clientId: string;
-  /** Human-readable app name (falls back to clientId) */
+  
   appName?: string;
-  /** The user's display name */
+  
   userName?: string;
-  /** The user's email */
+  
   userEmail?: string;
-  /** OAuth scopes requested (e.g. ['profile', 'email', 'wallet:read']) */
+  
   scopes?: string[];
-  /** Where to send the user after Allow */
+  
   redirectUri?: string;
-  /** Called when user clicks Allow */
+  
   onAllow: () => void;
-  /** Called when user clicks Deny */
+  
   onDeny: () => void;
 }
 
-// ── Scope metadata ─────────────────────────────────────────────────────────
 const SCOPE_META: Record<string, { label: string; description: string; icon: React.ElementType; risk: 'low' | 'medium' }> = {
   profile: {
     label: 'Basic Profile',
@@ -112,14 +111,13 @@ export default function LoginPermissionPage({
 
   const handleAllow = () => {
     setStatus('processing');
-    // Simulate a short processing window before granting
+    
     setTimeout(() => {
       setStatus('success');
       setTimeout(onAllow, 2000);
     }, 1800);
   };
 
-  // Initials from clientId / appName for the app avatar
   const initials = displayName
     .replace(/[^a-zA-Z\s]/g, ' ')
     .trim()
@@ -128,7 +126,6 @@ export default function LoginPermissionPage({
     .map((w) => w[0]?.toUpperCase() ?? '')
     .join('');
 
-  // User initials
   const userInitials = userName
     .trim()
     .split(/\s+/)
@@ -138,14 +135,14 @@ export default function LoginPermissionPage({
 
   return (
     <div className="min-h-screen bg-[#050508] flex items-center justify-center p-6 text-white relative overflow-hidden">
-      {/* Ambient glows */}
+      {}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.02] pointer-events-none" />
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#3EC6C0]/5 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute top-[40%] left-[50%] w-72 h-72 bg-purple-500/3 rounded-full blur-[100px] pointer-events-none" />
 
       <AnimatePresence mode="wait">
-        {/* ── CONSENT SCREEN ─────────────────────────────────── */}
+        {}
         {status === 'consent' && (
           <motion.div
             key="consent"
@@ -155,11 +152,11 @@ export default function LoginPermissionPage({
             transition={{ duration: 0.4 }}
             className="relative w-full max-w-[480px] rounded-3xl border border-[#27272A] bg-[#0A0A0E]/80 backdrop-blur-2xl shadow-2xl overflow-hidden"
           >
-            {/* Top gradient stripe */}
+            {}
             <div className="h-1 w-full bg-gradient-to-r from-[#D4AF37] via-[#3EC6C0] to-[#D4AF37]" />
 
             <div className="p-8 space-y-6">
-              {/* ── Header ── */}
+              {}
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-1.5 text-[10px] text-[#D4AF37] font-semibold uppercase tracking-wider mb-1">
@@ -168,7 +165,7 @@ export default function LoginPermissionPage({
                   </div>
                   <h1 className="text-xl font-bold tracking-tight">Consent Request</h1>
                 </div>
-                {/* Logged-in user chip */}
+                {}
                 <div className="flex items-center gap-2 bg-[#16161D] px-3 py-1.5 rounded-xl border border-[#27272A] shrink-0">
                   <div className="w-6 h-6 rounded-full bg-[#D4AF37]/15 flex items-center justify-center text-[#D4AF37] text-[9px] font-bold">
                     {userInitials || 'U'}
@@ -177,14 +174,14 @@ export default function LoginPermissionPage({
                 </div>
               </div>
 
-              {/* ── App → Wallet connection graphic ── */}
+              {}
               <div className="flex items-center gap-3 p-4 bg-[#0E0E16] border border-[#27272A] rounded-2xl">
-                {/* App avatar */}
+                {}
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D4AF37]/20 to-[#3EC6C0]/20 border border-[#27272A] flex items-center justify-center text-sm font-bold text-white shrink-0">
                   {initials || '?'}
                 </div>
 
-                {/* Arrows */}
+                {}
                 <div className="flex-1 flex items-center justify-center gap-1 min-w-0">
                   <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-[#D4AF37]/40" />
                   <div className="p-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20">
@@ -193,7 +190,7 @@ export default function LoginPermissionPage({
                   <div className="flex-1 h-[1px] bg-gradient-to-r from-[#3EC6C0]/40 via-[#3EC6C0]/40 to-transparent" />
                 </div>
 
-                {/* Chain Hook avatar */}
+                {}
                 <div className="w-12 h-12 rounded-2xl bg-[#1A1A24] border border-[#27272A] flex items-center justify-center shrink-0">
                   <img
                     src="https://res.cloudinary.com/ecxs6pgw/image/upload/v1783354359/logo_acvlmj.png"
@@ -206,7 +203,7 @@ export default function LoginPermissionPage({
                 </div>
               </div>
 
-              {/* ── App details card ── */}
+              {}
               <div className="bg-[#121217] rounded-2xl border border-[#27272A] overflow-hidden">
                 <div className="px-5 py-4 border-b border-[#27272A] bg-[#15151D]/50 flex items-center justify-between">
                   <div>
@@ -243,7 +240,7 @@ export default function LoginPermissionPage({
                 </div>
               </div>
 
-              {/* ── Scopes ── */}
+              {}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] uppercase font-bold tracking-widest text-[#71717A]">
@@ -262,7 +259,7 @@ export default function LoginPermissionPage({
                 </ul>
               </div>
 
-              {/* ── Security notice ── */}
+              {}
               <div className="p-3.5 bg-[#16161D] border border-[#27272A] rounded-xl flex gap-3 items-start">
                 <Lock size={14} className="text-[#D4AF37] shrink-0 mt-0.5" />
                 <p className="text-[10px] text-[#71717A] leading-relaxed">
@@ -272,7 +269,7 @@ export default function LoginPermissionPage({
                 </p>
               </div>
 
-              {/* ── Actions ── */}
+              {}
               <div className="flex gap-4 pt-1">
                 <button
                   type="button"
@@ -298,7 +295,7 @@ export default function LoginPermissionPage({
           </motion.div>
         )}
 
-        {/* ── PROCESSING SCREEN ──────────────────────────────── */}
+        {}
         {status === 'processing' && (
           <motion.div
             key="processing"
@@ -324,7 +321,7 @@ export default function LoginPermissionPage({
           </motion.div>
         )}
 
-        {/* ── SUCCESS SCREEN ──────────────────────────────────── */}
+        {}
         {status === 'success' && (
           <motion.div
             key="success"

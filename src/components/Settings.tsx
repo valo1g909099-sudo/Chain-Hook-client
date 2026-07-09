@@ -95,16 +95,6 @@ export default function Settings() {
                     securitySettings={settings?.security_2fa}
                     onUpdate={(data) => handleUpdateSettings({ security_2fa: data })}
                 />
-                <div className="p-6 rounded-2xl bg-[#16161D] border border-[#27272A] space-y-4">
-                    <h2 className="text-sm font-semibold">External Payment Requests</h2>
-                    <p className="text-xs text-[#71717A]">Manage permissions for external websites to initiate payments.</p>
-                    <button
-                        onClick={() => navigate('/payment-permission')}
-                        className="w-full bg-[#D4AF37] text-[#050508] p-3 rounded-xl text-xs font-bold hover:bg-[#B8962E] transition-colors"
-                    >
-                        Simulate Payment Request
-                    </button>
-                </div>
             </div>
         </div>
     );

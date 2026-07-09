@@ -11,7 +11,6 @@ import MarketSentiment from './MarketSentiment';
 import QuickCurrencyList from './QuickCurrencyList';
 import { walletService } from '@/services/walletService';
 
-
 interface Balances {
   usd: number;
   eur: number;
@@ -67,8 +66,7 @@ export default function Convert() {
 
   const rate = RATES[fromCurrency.toUpperCase()][toCurrency.toUpperCase()];
   const numericAmount = parseFloat(amount) || 0;
-  
-  // Calculate conversion fee: 0.4% or flat flat flat flat rate (flat 2 units or min 1)
+
   const feePercent = 0.004;
   const rawConverted = numericAmount * rate;
   const feeAmount = numericAmount * feePercent;
@@ -101,10 +99,9 @@ export default function Convert() {
     }
 
     try {
-      // Process conversion on the backend
-      const res = await walletService.convert(fromCurrency.toUpperCase(), toCurrency.toUpperCase(), numericAmount);
       
-      // Update front-end balances with the returned wallet balances
+      const res = await walletService.convert(fromCurrency.toUpperCase(), toCurrency.toUpperCase(), numericAmount);
+
       setBalances({
         usd: parseFloat(res.wallet.USD as string) || 0,
         eur: parseFloat(res.wallet.EUR as string) || 0,
@@ -112,7 +109,6 @@ export default function Convert() {
         jpy: parseFloat(res.wallet.JPY as string) || 0,
       });
 
-      // Refetch transactions from backend
       const txs = await walletService.getTransactions();
       setTransactions(txs);
 
@@ -137,7 +133,7 @@ export default function Convert() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Conversion Form Card */}
+        {}
         <div className="lg:col-span-1 glass p-5 rounded-2xl border border-[#1C1C24] bg-[#1C1C24]/20 shadow-lg flex flex-col justify-between space-y-4">
             <div>
               <div className="flex justify-between items-center mb-4">
@@ -170,7 +166,7 @@ export default function Convert() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {/* Amount Input */}
+                  {}
                   <div className="relative">
                     <span className="absolute left-3.5 top-3.5 text-white font-bold text-lg">{fromSymbol}</span>
                     <input 
@@ -187,18 +183,18 @@ export default function Convert() {
                     </button>
                   </div>
 
-                  {/* Currency Selectors & Swap Button */}
+                  {}
                   <div className="flex items-center justify-between gap-3 bg-[#0D0D12] border border-[#27272A] p-2 rounded-xl">
                     <div className="relative flex-1">
                       <select 
                         value={fromCurrency} 
                         onChange={(e) => setFromCurrency(e.target.value as any)}
-                        className="w-full bg-transparent pl-3 pr-8 py-2 text-xs font-bold text-white appearance-none outline-none cursor-pointer"
+                        className="w-full bg-[#0D0D12] pl-3 pr-8 py-2 text-xs font-bold text-white appearance-none outline-none cursor-pointer"
                       >
-                        <option value="usd">USD</option>
-                        <option value="eur">EUR</option>
-                        <option value="gbp">GBP</option>
-                        <option value="jpy">JPY</option>
+                        <option value="usd" className="bg-[#0D0D12] text-white">USD</option>
+                        <option value="eur" className="bg-[#0D0D12] text-white">EUR</option>
+                        <option value="gbp" className="bg-[#0D0D12] text-white">GBP</option>
+                        <option value="jpy" className="bg-[#0D0D12] text-white">JPY</option>
                       </select>
                       <ChevronDown size={12} className="absolute right-2 top-3 text-[#71717A] pointer-events-none" />
                     </div>
@@ -215,18 +211,18 @@ export default function Convert() {
                       <select 
                         value={toCurrency} 
                         onChange={(e) => setToCurrency(e.target.value as any)}
-                        className="w-full bg-transparent pl-3 pr-8 py-2 text-xs font-bold text-white appearance-none outline-none cursor-pointer"
+                        className="w-full bg-[#0D0D12] pl-3 pr-8 py-2 text-xs font-bold text-white appearance-none outline-none cursor-pointer"
                       >
-                        <option value="usd">USD</option>
-                        <option value="eur">EUR</option>
-                        <option value="gbp">GBP</option>
-                        <option value="jpy">JPY</option>
+                        <option value="usd" className="bg-[#0D0D12] text-white">USD</option>
+                        <option value="eur" className="bg-[#0D0D12] text-white">EUR</option>
+                        <option value="gbp" className="bg-[#0D0D12] text-white">GBP</option>
+                        <option value="jpy" className="bg-[#0D0D12] text-white">JPY</option>
                       </select>
                       <ChevronDown size={12} className="absolute right-2 top-3 text-[#71717A] pointer-events-none" />
                     </div>
                   </div>
 
-                  {/* Rate Detail Box */}
+                  {}
                   <div className="bg-[#0D0D12] p-3.5 rounded-xl border border-[#1F1F23]/80 space-y-2.5">
                       <div className="flex justify-between items-center text-[10px]">
                         <span className="text-[#9A9AA5]">Exchange Rate</span>
@@ -271,7 +267,7 @@ export default function Convert() {
             </div>
         </div>
         
-        {/* Right side content */}
+        {}
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
             <LiveRates />
             <ExchangeHistory />

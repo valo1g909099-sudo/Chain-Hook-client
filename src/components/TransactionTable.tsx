@@ -12,7 +12,6 @@ interface TransactionItem {
 export default function TransactionTable({ transactions = [] }: { transactions?: TransactionItem[] }) {
   const [filter, setFilter] = useState('All');
 
-  // Filter transactions based on type (Credit/Debit)
   const filteredTransactions = transactions.filter(t => {
     const isDebit = t.amount.startsWith('-');
     if (filter === 'All') return true;
@@ -21,7 +20,6 @@ export default function TransactionTable({ transactions = [] }: { transactions?:
     return true;
   });
 
-  // Limit to most recent 4 for the dashboard view
   const displayedTransactions = filteredTransactions.slice(0, 4);
 
   const getStatusIcon = (status: string) => {

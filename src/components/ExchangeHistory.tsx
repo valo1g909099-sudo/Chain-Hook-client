@@ -7,14 +7,12 @@ interface OutletContextType {
 
 export default function ExchangeHistory() {
   const { transactions } = useOutletContext<OutletContextType>();
-  
-  // Filter for conversions
+
   const conversionTxs = (transactions || []).filter(tx => 
     tx.entity.toUpperCase().includes('CONVERSION') || 
     tx.method.toUpperCase().includes('FX SWAP')
   ).slice(0, 3);
 
-  // Helper to parse amount, e.g. "-$1,000.00 (+€996.00)"
   const parseConversionAmount = (amountStr: string) => {
     const match = amountStr.match(/-([^\s]+)\s+\(\+([^\s]+)\)/);
     if (match) {

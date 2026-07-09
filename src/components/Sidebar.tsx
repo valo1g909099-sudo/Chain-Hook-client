@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Send, ArrowLeftRight, CreditCard, Settings, ShoppingBag, LogOut, Terminal } from 'lucide-react';
+import { LayoutDashboard, Receipt, Send, ArrowLeftRight, CreditCard, Settings, LogOut, Terminal } from 'lucide-react';
 import Logo from '@/assets/logo/logo.png';
 import { useAuth } from '../hooks/useAuth';
 
@@ -13,7 +13,6 @@ const menu = [
   { name: 'Transaction',      path: '/transaction',      icon: Send,            adminOnly: false },
   { name: 'Convert',          path: '/convert',          icon: ArrowLeftRight,  adminOnly: false },
   { name: 'Cards',            path: '/cards',            icon: CreditCard,      adminOnly: false },
-  { name: 'Merchant Sandbox', path: '/merchant-sandbox', icon: ShoppingBag,     adminOnly: false },
   { name: 'OAuth Console',    path: '/test-auth-generator', icon: Terminal,     adminOnly: true  },
   { name: 'Settings',         path: '/settings',         icon: Settings,        adminOnly: false },
 ];

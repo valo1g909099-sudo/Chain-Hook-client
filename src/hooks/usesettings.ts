@@ -55,7 +55,6 @@ export function useSettings(): UseSettingsResult {
       try {
         const data = await settingsService.update(payload);
 
-        
         const updatedSections = hasUpdatedWrapper(data) ? data.updated : data;
         setSettings((prev) => (prev ? { ...prev, ...updatedSections } : prev));
 

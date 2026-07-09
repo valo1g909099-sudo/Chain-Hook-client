@@ -34,13 +34,13 @@ export default function ModernCard({
 
   return (
     <div className="group flex flex-col items-center gap-5 w-full max-w-[360px] mx-auto">
-      {/* 3D Perspective Container */}
+      {}
       <div 
         className="w-full h-52 cursor-pointer"
         style={{ perspective: '1000px' }}
         onClick={handleFlip}
       >
-        {/* Card Flipper Inner */}
+        {}
         <div 
           className="relative w-full h-full duration-700 select-none"
           style={{ 
@@ -48,7 +48,7 @@ export default function ModernCard({
             transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
           }}
         >
-          {/* ================= CARD FRONT FACE ================= */}
+          {}
           <div 
             className={`absolute inset-0 w-full h-full rounded-3xl p-6 text-white flex flex-col justify-between shadow-2xl border transition-all duration-300 ${
               isFrozen 
@@ -57,14 +57,14 @@ export default function ModernCard({
             }`}
             style={{ backfaceVisibility: 'hidden' }}
           >
-            {/* Glossy Overlay Grid Pattern */}
+            {}
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
             <div className="absolute -top-12 -left-12 w-28 h-28 bg-[#D4AF37]/10 rounded-full blur-2xl pointer-events-none"></div>
             
-            {/* Top row */}
+            {}
             <div className="relative flex justify-between items-start">
               <div className="flex flex-col gap-1">
-                {/* Microchip */}
+                {}
                 <div className="w-10 h-7 bg-gradient-to-r from-[#E6C65E] to-[#A88C30] rounded-md shadow-inner flex flex-col justify-between p-1.5 overflow-hidden">
                   <div className="h-[1px] bg-black/20 w-full"></div>
                   <div className="h-[1px] bg-black/20 w-full"></div>
@@ -78,14 +78,14 @@ export default function ModernCard({
               </div>
             </div>
 
-            {/* Card Number */}
+            {}
             <div className="relative">
               <p className="font-mono text-lg tracking-[0.2em] text-white">
                 {showDetails ? cardNumber : '••••  ••••  ••••  ' + cardNumber.slice(-4)}
               </p>
             </div>
 
-            {/* Bottom details */}
+            {}
             <div className="flex justify-between items-end">
               <div className="flex flex-col">
                 <span className="text-[7px] uppercase font-bold tracking-wider text-[#71717A]">Cardholder</span>
@@ -97,7 +97,7 @@ export default function ModernCard({
               </div>
             </div>
 
-            {/* Status indicators */}
+            {}
             <div className="absolute top-4 right-4 flex gap-1.5">
               {isFrozen && (
                 <span className="px-2 py-0.5 bg-red-500/20 border border-red-500/30 rounded-full text-[8px] font-bold text-red-400">
@@ -107,7 +107,7 @@ export default function ModernCard({
             </div>
           </div>
 
-          {/* ================= CARD BACK FACE ================= */}
+          {}
           <div 
             className={`absolute inset-0 w-full h-full rounded-3xl text-white flex flex-col justify-between shadow-2xl border transition-all duration-300 ${
               isFrozen 
@@ -119,10 +119,10 @@ export default function ModernCard({
               transform: 'rotateY(180deg)'
             }}
           >
-            {/* Magnetic Stripe */}
+            {}
             <div className="w-full h-10 bg-black mt-4"></div>
 
-            {/* Signature Block & CVV */}
+            {}
             <div className="px-6 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[7px] uppercase font-bold tracking-wider text-[#71717A]">Authorized Signature</span>
@@ -130,18 +130,18 @@ export default function ModernCard({
               </div>
               
               <div className="flex items-center gap-2">
-                {/* Signature area */}
+                {}
                 <div className="flex-1 h-7 bg-zinc-800 rounded-md border border-zinc-700/50 flex items-center px-3 italic font-serif text-[#A1A1AA] text-[10px] select-none pointer-events-none [background:repeating-linear-gradient(45deg,#27272a,#27272a_10px,#1f1f23_10px,#1f1f23_20px)]">
                   {cardholderName}
                 </div>
-                {/* CVV */}
+                {}
                 <div className="w-12 h-7 bg-zinc-900 border border-zinc-700 rounded-md flex items-center justify-center font-mono text-xs font-bold text-[#D4AF37]">
                   {showDetails ? cvv : '•••'}
                 </div>
               </div>
             </div>
 
-            {/* Info and contact details */}
+            {}
             <div className="p-6 pt-0 flex justify-between items-center text-[7px] text-[#52525B]">
               <div className="space-y-0.5">
                 <p>Support: support@chainhook.com</p>
@@ -156,15 +156,15 @@ export default function ModernCard({
         </div>
       </div>
 
-      {/* Advantage and Text */}
+      {}
       <div className="text-center w-full px-2">
         <p className="text-[11px] font-semibold text-white mb-0.5">{type} Advantage</p>
         <p className="text-[10px] text-[#71717A] leading-relaxed">{advantage}</p>
       </div>
 
-      {/* Action Buttons */}
+      {}
       <div className="flex w-full gap-2 px-1">
-        {/* Toggle Details Button */}
+        {}
         <button 
           onClick={onToggleDetails}
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold bg-[#1C1C24] hover:bg-[#27272A] text-white transition-all border border-zinc-800 hover:border-zinc-700"
@@ -174,7 +174,7 @@ export default function ModernCard({
           {showDetails ? 'Hide' : 'Show'}
         </button>
 
-        {/* Rotate / Flip Button */}
+        {}
         <button 
           onClick={handleFlip}
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold bg-[#1C1C24] hover:bg-[#27272A] text-white transition-all border border-zinc-800 hover:border-zinc-700"
@@ -184,7 +184,7 @@ export default function ModernCard({
           Flip
         </button>
 
-        {/* Freeze/Unfreeze Button */}
+        {}
         <button 
           onClick={onToggleFrozen}
           className={`flex-[1.5] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold transition-all ${

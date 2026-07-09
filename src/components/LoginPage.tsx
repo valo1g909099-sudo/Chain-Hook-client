@@ -9,12 +9,7 @@ interface LoginPageProps {
     merchantName: string;
     amount: string;
   };
-  /**
-   * Optional client_id for a third-party Client (login widget / payment
-   * checkout). If provided, the backend will return a redirect_url on
-   * successful login and this component will bounce the browser there
-   * automatically instead of calling onLogin().
-   */
+
   clientId?: string;
 }
 
@@ -51,24 +46,70 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
         onLogin();
       }
     } catch {
-      // error state is already set by useAuth; nothing further to do here
+      
     }
   };
 
   const displayError = formError || error;
 
+  const FeaturePillars = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+      <div className="flex gap-3 items-start p-3.5 rounded-2xl bg-zinc-900/30 border border-zinc-900 hover:border-zinc-850 transition-all">
+        <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-[#D4AF37]">
+          <ShieldCheck size={16} />
+        </div>
+        <div>
+          <h4 className="text-xs font-medium text-white mb-0.5">Zero-Trust Encrypted</h4>
+          <p className="text-[10px] text-zinc-500 leading-normal">Every session and endpoint transaction is secure and signature-verified.</p>
+        </div>
+      </div>
+
+      <div className="flex gap-3 items-start p-3.5 rounded-2xl bg-zinc-900/30 border border-zinc-900 hover:border-zinc-850 transition-all">
+        <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-[#3EC6C0]">
+          <Sparkles size={16} />
+        </div>
+        <div>
+          <h4 className="text-xs font-medium text-white mb-0.5">Instant FX Swaps</h4>
+          <p className="text-[10px] text-zinc-500 leading-normal">Instantly swap and hold major world currencies without settlement lag.</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const StatsRow = () => (
+    <div className="flex flex-wrap items-center justify-between gap-4 text-zinc-500 text-xs">
+      <div className="flex gap-6">
+        <div>
+          <div className="text-white font-medium text-sm">100%</div>
+          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">API Uptime</div>
+        </div>
+        <div>
+          <div className="text-white font-medium text-sm">&lt; 5ms</div>
+          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Settlement Latency</div>
+        </div>
+        <div>
+          <div className="text-white font-medium text-sm">$10B+</div>
+          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Volume Managed</div>
+        </div>
+      </div>
+      <div>
+        <span>© 2024 Chain Hook Inc.</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-[#050508] flex flex-col lg:flex-row text-white relative overflow-hidden font-sans">
-      {/* Background decoration (ambient glow / fiber pattern) */}
+      {}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.02] pointer-events-none"></div>
 
-      {/* LEFT SIDE: Branding, Logo and Informative context */}
+      {}
       <div className="w-full lg:w-[55%] flex flex-col justify-between p-8 lg:p-16 relative overflow-hidden min-h-[45vh] lg:min-h-screen">
-        {/* Ambient glow specifically for branding side */}
+        {}
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-[10%] right-[-10%] w-80 h-80 bg-[#3EC6C0]/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-        {/* Top brand header */}
+        {}
         <div className="relative z-10 flex items-center gap-3">
           <img
             src="https://res.cloudinary.com/ecxs6pgw/image/upload/v1783354359/logo_acvlmj.png"
@@ -79,7 +120,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
           <span className="text-xs uppercase tracking-widest text-zinc-400 font-medium">Chain Hook Wallet</span>
         </div>
 
-        {/* Hero informative context */}
+        {}
         <div className="relative z-10 my-auto py-12 max-w-xl space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -110,58 +151,24 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
             Manage multi-currency ledger balances, issue secure payment authorizations, and deploy merchant sandbox simulations with global compliance baked right into the protocol.
           </motion.p>
 
-          {/* Key pillars */}
+          {}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4"
+            className="hidden lg:block"
           >
-            <div className="flex gap-3 items-start p-3.5 rounded-2xl bg-zinc-900/30 border border-zinc-900 hover:border-zinc-850 transition-all">
-              <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-[#D4AF37]">
-                <ShieldCheck size={16} />
-              </div>
-              <div>
-                <h4 className="text-xs font-medium text-white mb-0.5">Zero-Trust Encrypted</h4>
-                <p className="text-[10px] text-zinc-500 leading-normal">Every session and endpoint transaction is secure and signature-verified.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-3 items-start p-3.5 rounded-2xl bg-zinc-900/30 border border-zinc-900 hover:border-zinc-850 transition-all">
-              <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-[#3EC6C0]">
-                <Sparkles size={16} />
-              </div>
-              <div>
-                <h4 className="text-xs font-medium text-white mb-0.5">Instant FX Swaps</h4>
-                <p className="text-[10px] text-zinc-500 leading-normal">Instantly swap and hold major world currencies without settlement lag.</p>
-              </div>
-            </div>
+            <FeaturePillars />
           </motion.div>
         </div>
 
-        {/* Footer / Stats section on left */}
-        <div className="relative z-10 border-t border-zinc-900 pt-6 flex flex-wrap items-center justify-between gap-4 text-zinc-500 text-xs">
-          <div className="flex gap-6">
-            <div>
-              <div className="text-white font-medium text-sm">99.999%</div>
-              <div className="text-[10px] text-zinc-500 uppercase tracking-wider">API Uptime</div>
-            </div>
-            <div>
-              <div className="text-white font-medium text-sm">&lt; 85ms</div>
-              <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Settlement Latency</div>
-            </div>
-            <div>
-              <div className="text-white font-medium text-sm">$4.8B+</div>
-              <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Volume Managed</div>
-            </div>
-          </div>
-          <div>
-            <span>© {new Date().getFullYear()} Chain Hook Inc.</span>
-          </div>
+        {}
+        <div className="relative z-10 border-t border-zinc-900 pt-6 hidden lg:flex">
+          <StatsRow />
         </div>
       </div>
 
-      {/* RIGHT SIDE: Authentication block */}
+      {}
       <div className="w-full lg:w-[45%] flex items-center justify-center p-8 lg:p-12 bg-[#08080C] border-t lg:border-t-0 lg:border-l border-zinc-900/60 relative z-10">
         <div className="absolute top-[30%] right-[-10%] w-72 h-72 bg-[#3EC6C0]/5 rounded-full blur-[90px] pointer-events-none"></div>
 
@@ -171,7 +178,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
           transition={{ duration: 0.5 }}
           className="w-full max-w-[420px] space-y-6"
         >
-          {/* OAuth Payment Redirection Warning Banner */}
+          {}
           {oauthNotice && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -304,7 +311,17 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
               <p className="text-[11px] text-zinc-500 leading-normal">Ensure you are connecting to `chainhook.com` prior to inputting any credentials or API authorization codes.</p>
             </div>
           </div>
+
+          {}
+          <div className="lg:hidden pt-6 mt-6 border-t border-zinc-900">
+            <FeaturePillars />
+          </div>
         </motion.div>
+      </div>
+
+      {}
+      <div className="lg:hidden w-full bg-[#08080C] border-t border-zinc-900/60 px-6 py-6 relative z-10">
+        <StatsRow />
       </div>
     </div>
   );

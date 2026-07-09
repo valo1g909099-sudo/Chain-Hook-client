@@ -30,12 +30,10 @@ export default function TestAuthGenerator() {
       total_price: totalPrice
     };
 
-    // Encode to base64 safely
     const jsonStr = JSON.stringify(info);
     const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
     setEncodedInfo(encoded);
 
-    // Build authorization url containing ONLY client_id
     const queryParams = new URLSearchParams();
     queryParams.set('client_id', encoded);
 
@@ -57,7 +55,7 @@ export default function TestAuthGenerator() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Title Header */}
+      {}
       <div className="bg-[#0D0D12]/40 backdrop-blur-md p-6 rounded-3xl border border-[#1C1C24] flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
@@ -74,7 +72,7 @@ export default function TestAuthGenerator() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Config Panel */}
+        {}
         <div className="lg:col-span-7 bg-[#0A0A0E]/80 backdrop-blur-2xl border border-[#27272A] rounded-3xl p-6 space-y-5">
           <h3 className="text-sm font-semibold text-white flex items-center gap-2 border-b border-[#27272A] pb-3">
             <Layers size={15} className="text-[#3EC6C0]" />
@@ -83,7 +81,7 @@ export default function TestAuthGenerator() {
 
           <form onSubmit={handleGenerate} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              {/* Flow Type */}
+              {}
               <div className="col-span-2 space-y-1.5">
                 <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Flow Type</label>
                 <div className="grid grid-cols-2 gap-2">
@@ -112,7 +110,7 @@ export default function TestAuthGenerator() {
                 </div>
               </div>
 
-              {/* Platform Name */}
+              {}
               <div className="space-y-1.5">
                 <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Platform Name</label>
                 <input
@@ -125,7 +123,7 @@ export default function TestAuthGenerator() {
                 />
               </div>
 
-              {/* Platform URL / Redirect URI */}
+              {}
               <div className="space-y-1.5">
                 <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Redirect URI</label>
                 <input
@@ -140,7 +138,7 @@ export default function TestAuthGenerator() {
 
               {flowType === 'payment' ? (
                 <>
-                  {/* Merchant Name */}
+                  {}
                   <div className="space-y-1.5">
                     <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Merchant Name</label>
                     <input
@@ -153,7 +151,7 @@ export default function TestAuthGenerator() {
                     />
                   </div>
 
-                  {/* Total Price */}
+                  {}
                   <div className="space-y-1.5">
                     <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Total Price</label>
                     <input
@@ -191,9 +189,9 @@ export default function TestAuthGenerator() {
           </form>
         </div>
 
-        {/* Right Output Panel */}
+        {}
         <div className="lg:col-span-5 flex flex-col gap-6">
-          {/* Live Output Section */}
+          {}
           <div className="bg-[#0A0A0E]/80 backdrop-blur-2xl border border-[#27272A] rounded-3xl p-6 flex-1 flex flex-col justify-between space-y-4">
             <div>
               <h3 className="text-sm font-semibold text-white flex items-center gap-2 border-b border-[#27272A] pb-3 mb-4">
@@ -208,7 +206,7 @@ export default function TestAuthGenerator() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {/* Encoded Info */}
+                  {}
                   <div className="space-y-1.5">
                     <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-500">Base64 Encoded `client_id`</span>
                     <div className="bg-[#121218] p-3 rounded-xl border border-zinc-800 text-[10px] font-mono text-[#3EC6C0] break-all max-h-24 overflow-y-auto">
@@ -216,7 +214,7 @@ export default function TestAuthGenerator() {
                     </div>
                   </div>
 
-                  {/* Target URL */}
+                  {}
                   <div className="space-y-1.5">
                     <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-500">Full Sandbox Authorize URL</span>
                     <div className="bg-[#121218] p-3 rounded-xl border border-zinc-800 text-[10px] font-mono text-[#D4AF37] break-all">
@@ -256,7 +254,7 @@ export default function TestAuthGenerator() {
             )}
           </div>
 
-          {/* Quick Info Box */}
+          {}
           <div className="p-4 rounded-3xl bg-[#16161D] border border-[#27272A] space-y-2">
             <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-[#3EC6C0]" />

@@ -3,25 +3,10 @@ import { Send, ChevronDown, AlertCircle, CheckCircle2, Loader2 } from 'lucide-re
 import { walletService } from '@/services/walletService';
 
 export default function TransferForm({ recipient, setRecipient, amount, setAmount, type, setType }: any) {
-  const [jpyRate, setJpyRate] = useState(148.50);
   const [currency, setCurrency] = useState('USD');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchRate = async () => {
-      try {
-        const history = await walletService.getPriceHistory();
-        if (history && history.length > 0) {
-          setJpyRate(parseFloat(history[0].JPY as string) || 148.50);
-        }
-      } catch (err) {
-        console.warn(err);
-      }
-    };
-    fetchRate();
-  }, []);
 
   const handleSend = async () => {
     setError(null);
@@ -53,9 +38,6 @@ export default function TransferForm({ recipient, setRecipient, amount, setAmoun
     <div className="bg-[#1C1C24]/20 backdrop-blur-sm p-4 rounded-2xl border border-[#1C1C24] shadow-lg h-full">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-xs font-semibold text-white">Initiate Transfer</h3>
-        <span className="text-[9px] text-[#A1A1AA] bg-[#1C1C24] px-2 py-0.5 rounded-lg border border-[#27272A] font-mono">
-          USD / JPY: <strong className="text-[#D4AF37]">{jpyRate.toFixed(2)}</strong>
-        </span>
       </div>
 
       <div className="grid grid-cols-1 gap-2">

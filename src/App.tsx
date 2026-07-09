@@ -11,14 +11,12 @@ import Settings from './components/Settings';
 import LoginPage from './components/LoginPage';
 import PaymentPermissionPage from './components/PaymentPermissionPage';
 import LoginPermissionPage from './components/LoginPermissionPage';
-import MerchantSandbox from './components/MerchantSandbox';
 import TestAuthGenerator from './components/TestAuthGenerator';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import { walletService, WalletAnalytics } from '@/services/walletService';
-
 
 interface TransactionItem {
   entity: string;
@@ -50,10 +48,6 @@ const DEFAULT_BALANCES: Balances = {
   jpy: 154200.00,
 };
 
-// ---------------------------------------------------------
-// Layout: the main shell (sidebar + header + content area)
-// Wrapped in ProtectedRoute so only authenticated users see it
-// ---------------------------------------------------------
 function AppLayout() {
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -116,22 +110,17 @@ function AppLayout() {
   return (
     <div className="flex h-screen w-full bg-[#0A0A0B] text-[#E4E4E7]">
       <Sidebar onLogout={handleLogout} />
-      <main className="flex-1 overflow-y-auto">
-        <div className="p-4 sm:p-8 pb-0">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <div className="p-4 sm:p-8 pb-0 flex-shrink-0">
           <Header onLogout={handleLogout} />
         </div>
-        <div className="p-4 sm:p-8 pt-4">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 pt-4">
           <Outlet context={{ balances, setBalances, transactions, setTransactions, analytics, setAnalytics }} />
         </div>
-      </main>
+      </div>
     </div>
   );
-}// ---------------------------------------------------------
-// Unified /authorize page — handles type=login and type=payment
-// Required query params: type, client_id
-// Optional: merchant_name, amount, redirect_uri, scope, app_name, ...
-// Validates client_id against the backend before showing consent.
-// ---------------------------------------------------------
+}
 
 type ValidationState =
   | { status: 'loading' }
@@ -158,12 +147,10 @@ function AuthorizePage() {
   const scopeRaw   = searchParams.get('scope');
   const scopes     = scopeRaw ? scopeRaw.split(',').map(s => s.trim()).filter(Boolean) : undefined;
 
-  // ── Auth guard — preserve ALL query params through login ─
   if (!isAuthenticated) {
     return <Navigate to={`/login${window.location.search}`} replace />;
   }
 
-  // ── Validate client_id against backend on mount ──────────
   useEffect(() => {
     if (!clientId) {
       setValidation({
@@ -175,12 +162,11 @@ function AuthorizePage() {
       return;
     }
 
-    // Quick local decode attempt to show payload details in error screens
     let localPayload: any = null;
     try {
       localPayload = JSON.parse(atob(clientId));
     } catch (_) {
-      // Not decodable locally either
+      
     }
 
     const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
@@ -211,7 +197,6 @@ function AuthorizePage() {
       });
   }, [clientId]);
 
-  // ── Dynamically update document title and favicon based on client platform name ──
   useEffect(() => {
     const favicon = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
     
@@ -241,7 +226,6 @@ function AuthorizePage() {
     };
   }, [validation]);
 
-  // ── Loading Spinner ──────────────────────────────────────
   if (validation.status === 'loading') {
     return (
       <div className="min-h-screen bg-[#050508] flex items-center justify-center p-6 text-white">
@@ -253,7 +237,6 @@ function AuthorizePage() {
     );
   }
 
-  // ── Error Layout ─────────────────────────────────────────
   if (validation.status === 'error') {
     const { reason, message, details, decodedPayload } = validation;
 
@@ -362,16 +345,16 @@ function AuthorizePage() {
 
     return (
       <div className="min-h-screen bg-[#050508] flex items-center justify-center p-4 text-white relative overflow-hidden font-sans">
-        {/* Background glow effects */}
+        {}
         <div className={`absolute top-[-15%] left-[-10%] w-[500px] h-[500px] ${glowBg} rounded-full blur-[160px] pointer-events-none`} />
         <div className="absolute bottom-[-15%] right-[-10%] w-[500px] h-[500px] bg-[#D4AF37]/3 rounded-full blur-[160px] pointer-events-none" />
 
         <div className={`w-full max-w-[520px] rounded-3xl border ${borderColor} bg-[#0A0A0E]/90 backdrop-blur-2xl shadow-2xl overflow-hidden`}>
-          {/* Colored top accent bar */}
+          {}
           <div className={`h-1 w-full ${topBarColor}`} />
 
           <div className="p-8 space-y-6">
-            {/* Header */}
+            {}
             <div className="flex flex-col items-center text-center space-y-3">
               <div className={`p-4 rounded-2xl border ${iconBg} shadow-lg`}>
                 {meta.icon}
@@ -385,7 +368,7 @@ function AuthorizePage() {
               </div>
             </div>
 
-            {/* ── Decoded Payload Preview (if we could decode it) ── */}
+            {}
             {decodedPayload && (
               <div className="bg-[#111118] border border-[#1F1F27] rounded-2xl overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#1F1F27]">
@@ -409,7 +392,7 @@ function AuthorizePage() {
               </div>
             )}
 
-            {/* ── Specific Diagnostics per error reason ── */}
+            {}
             <div className="bg-[#0D0D14] border border-[#1C1C24] rounded-2xl p-5 space-y-3 text-xs">
               <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-600 block border-b border-[#1C1C24] pb-2.5">
                 Failure Analysis
@@ -508,7 +491,7 @@ function AuthorizePage() {
               )}
             </div>
 
-            {/* Recommendation box */}
+            {}
             <div className="p-4 bg-[#13131A] rounded-2xl border border-[#1C1C24] text-[10px] text-[#71717A] leading-relaxed">
               <strong className="text-[#A1A1AA]">How to fix:</strong> Open the{' '}
               <span className="text-[#D4AF37] font-semibold cursor-pointer" onClick={() => navigate('/test-auth-generator')}>
@@ -517,7 +500,7 @@ function AuthorizePage() {
               to generate a correctly encoded payload. Make sure the <code>platform_name</code> and <code>platform_url</code> match an active registered client in the Chain Hook system.
             </div>
 
-            {/* Action buttons */}
+            {}
             <div className="flex gap-3">
               <button
                 onClick={() => navigate('/test-auth-generator')}
@@ -544,7 +527,6 @@ function AuthorizePage() {
     );
   }
 
-  // ── Derive display values from validated payload ─────────
   const validatedPayload = validation.payload;
   const finalType        = validatedPayload?.type || type;
   const finalClientId    = clientId;
@@ -552,7 +534,6 @@ function AuthorizePage() {
   const finalAmount      = validatedPayload?.total_price || amount;
   const finalRedirectUri = validatedPayload?.platform_url || redirectUri;
 
-  // ── TYPE = PAYMENT ────────────────────────────────────────
   if (finalType === 'payment') {
     const merchantName = finalAppName ?? finalClientId;
 
@@ -621,7 +602,6 @@ function AuthorizePage() {
     );
   }
 
-  // ── TYPE = LOGIN ──────────────────────────────────────────
   if (finalType === 'login') {
     const handleAllow = () => {
       if (finalRedirectUri) {
@@ -655,11 +635,9 @@ function AuthorizePage() {
     );
   }
 
-  // ── Unknown type fallback ─────────────────────────────────
   return <Navigate to="/dashboard" replace />;
 }
 
-// Small helper components used inside error layout
 function ErrorRow({ color, title, desc }: { color: string; title: string; desc: string }) {
   return (
     <div className="flex items-start gap-2.5">
@@ -685,10 +663,6 @@ function PermBadge({ label, allowed }: { label: string; allowed: boolean }) {
   );
 }
 
-
-// ---------------------------------------------------------
-// Simulated (Settings) Payment Permission page
-// ---------------------------------------------------------
 function SimulatedPaymentPage() {
   const navigate = useNavigate();
 
@@ -728,8 +702,6 @@ function SimulatedPaymentPage() {
   );
 }
 
-
-
 interface OutletContextType {
   balances: Balances;
   setBalances: React.Dispatch<React.SetStateAction<Balances>>;
@@ -749,10 +721,6 @@ function TransactionHistoryPage() {
   return <TransactionHistory transactions={transactions} analytics={analytics} />;
 }
 
-// ---------------------------------------------------------
-// Login route: redirect to /authorize (preserving all query params)
-// after login when the user came from an /authorize flow.
-// ---------------------------------------------------------
 function LoginRoute() {
   const { isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
@@ -762,10 +730,8 @@ function LoginRoute() {
   const type = searchParams.get('type');
   const oauth = searchParams.get('oauth');
 
-  // Detect any OAuth/permission flow. Presence of client_id or type or oauth=true signals this.
   const hasPermissionFlow = !!clientId || type === 'login' || type === 'payment' || oauth === 'true';
 
-  // Already authenticated → bounce straight back to /authorize with all params
   if (isAuthenticated && hasPermissionFlow) {
     return <Navigate to={`/authorize${window.location.search}`} replace />;
   }
@@ -774,13 +740,12 @@ function LoginRoute() {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // Attempt to decode client_id locally for OAuth Banner notice
   let decodedPayload: any = null;
   if (clientId) {
     try {
       decodedPayload = JSON.parse(atob(clientId));
     } catch (_) {
-      // Not a valid base64 JSON payload, ignore for banner
+      
     }
   }
 
@@ -816,18 +781,15 @@ function LoginRoute() {
   );
 }
 
-// ---------------------------------------------------------
-// Root App: provides router + auth context
-// ---------------------------------------------------------
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public routes */}
+      {}
       <Route path="/login" element={<LoginRoute />} />
-      {/* Unified permission page: ?type=login|payment&client_id=... */}
+      {}
       <Route path="/authorize" element={<AuthorizePage />} />
 
-      {/* Protected layout routes */}
+      {}
       <Route
         element={
           <ProtectedRoute>
@@ -841,13 +803,12 @@ function AppRoutes() {
         <Route path="/transaction" element={<Transaction />} />
         <Route path="/convert" element={<Convert />} />
         <Route path="/cards" element={<CardService />} />
-        <Route path="/merchant-sandbox" element={<MerchantSandbox />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/payment-permission" element={<SimulatedPaymentPage />} />
         <Route path="/test-auth-generator" element={<AdminRoute><TestAuthGenerator /></AdminRoute>} />
       </Route>
 
-      {/* Fallback */}
+      {}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

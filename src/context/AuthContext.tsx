@@ -20,14 +20,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // On mount, verify the stored token is still valid and refresh user data.
   useEffect(() => {
     if (!user) return;
     userService
       .fetchProfile()
       .then(setUser)
       .catch(() => setUser(null));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   const login = useCallback(async (email: string, password: string, clientId?: string) => {

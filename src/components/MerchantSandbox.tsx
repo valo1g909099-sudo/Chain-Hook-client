@@ -66,7 +66,6 @@ export default function MerchantSandbox() {
         setSearchParams({});
     };
 
-    // Render payment success receipt screen
     if (isSuccess) {
         return (
             <div className="p-8 max-w-4xl mx-auto min-h-[80vh] flex flex-col justify-center items-center text-white">
@@ -75,7 +74,7 @@ export default function MerchantSandbox() {
                     animate={{ opacity: 1, scale: 1 }}
                     className="w-full max-w-lg p-8 rounded-3xl border border-[#3EC6C0]/30 bg-[#0A0A0E]/80 backdrop-blur-xl shadow-2xl relative overflow-hidden"
                 >
-                    {/* Glowing effect */}
+                    {}
                     <div className="absolute top-[-20%] left-[-20%] w-64 h-64 bg-[#3EC6C0]/10 rounded-full blur-[80px]"></div>
 
                     <div className="flex flex-col items-center text-center mb-8 relative z-10">
@@ -126,7 +125,6 @@ export default function MerchantSandbox() {
         );
     }
 
-    // Render payment cancelled/error screen
     if (isCancelled) {
         return (
             <div className="p-8 max-w-4xl mx-auto min-h-[80vh] flex flex-col justify-center items-center text-white">

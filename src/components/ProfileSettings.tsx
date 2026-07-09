@@ -35,9 +35,9 @@ export default function ProfileSettings({ profileSettings, onUpdate }: ProfileSe
         setSaving(true);
         setSaved(false);
         try {
-            // Update auth fields (name, email)
+            
             await userService.updateProfile({ name, email });
-            // Update bio settings
+            
             await onUpdate(bio);
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);

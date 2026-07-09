@@ -73,7 +73,7 @@ export default function Transaction() {
 
         <div className="space-y-4 flex flex-col gap-4">
           <PaymentAddressCard />
-          <FrequentContacts />
+          <FrequentContacts onSelectContact={(addr) => setRecipient(addr)} />
         </div>
       </div>
 

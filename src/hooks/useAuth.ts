@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { AuthContext } from '@/src/context/AuthContext';
 
-
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) {

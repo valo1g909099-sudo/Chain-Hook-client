@@ -13,7 +13,7 @@ export default function PaymentAddressCard() {
 
   return (
     <div className="bg-[#1C1C24]/20 backdrop-blur-sm p-5 rounded-2xl border border-[#1C1C24] shadow-lg flex flex-col justify-between space-y-4">
-      {/* Title */}
+      {}
       <div className="flex justify-between items-center">
         <h3 className="text-xs font-semibold text-white tracking-wide uppercase">My Payment Address</h3>
         <span className="text-[9px] text-[#3EC6C0] bg-[#3EC6C0]/10 border border-[#3EC6C0]/20 px-2 py-0.5 rounded-full">
@@ -21,7 +21,7 @@ export default function PaymentAddressCard() {
         </span>
       </div>
 
-      {/* Address Block */}
+      {}
       <div className="space-y-2">
         <div className="bg-[#0D0D12] border border-[#27272A] rounded-xl p-3 flex justify-between items-center group hover:border-[#D4AF37]/30 transition-all duration-300">
           <div className="space-y-1">
@@ -40,33 +40,11 @@ export default function PaymentAddressCard() {
         </div>
       </div>
 
-      {/* QR Code and Rate Grid */}
+      {}
       <div className="grid grid-cols-2 gap-4 items-center">
-        {/* QR Code */}
+        {}
         <div className="flex flex-col items-center justify-center p-3 bg-white rounded-xl aspect-square shadow-inner relative group cursor-pointer border border-[#1C1C24] hover:scale-[1.02] transition-transform duration-300">
-          <svg className="w-full h-full text-black" viewBox="0 0 100 100" fill="none">
-            {/* Mock QR Grid Pattern */}
-            <rect x="5" y="5" width="25" height="25" stroke="currentColor" strokeWidth="6" />
-            <rect x="12" y="12" width="11" height="11" fill="currentColor" />
-            <rect x="70" y="5" width="25" height="25" stroke="currentColor" strokeWidth="6" />
-            <rect x="77" y="12" width="11" height="11" fill="currentColor" />
-            <rect x="5" y="70" width="25" height="25" stroke="currentColor" strokeWidth="6" />
-            <rect x="12" y="77" width="11" height="11" fill="currentColor" />
-            
-            {/* Random blocks for QR code visual */}
-            <rect x="40" y="5" width="8" height="16" fill="currentColor" />
-            <rect x="55" y="5" width="8" height="8" fill="currentColor" />
-            <rect x="40" y="25" width="16" height="8" fill="currentColor" />
-            <rect x="5" y="40" width="16" height="8" fill="currentColor" />
-            <rect x="25" y="40" width="24" height="16" fill="currentColor" />
-            <rect x="80" y="40" width="15" height="15" fill="currentColor" />
-            <rect x="55" y="70" width="12" height="12" fill="currentColor" />
-            <rect x="75" y="75" width="20" height="8" fill="currentColor" />
-            <rect x="40" y="80" width="8" height="15" fill="currentColor" />
-            <rect x="55" y="85" width="15" height="10" fill="currentColor" />
-            <rect x="85" y="60" width="8" height="8" fill="currentColor" />
-            <rect x="60" y="40" width="12" height="12" fill="currentColor" />
-          </svg>
+        
           <div className="absolute inset-0 bg-black/60 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="text-[9px] text-white font-bold uppercase tracking-wider flex items-center gap-1">
               <QrCode size={10} /> Expand QR
@@ -74,7 +52,7 @@ export default function PaymentAddressCard() {
           </div>
         </div>
 
-        {/* Live Mid-Point Rate */}
+        {}
         <div className="bg-[#0D0D12] border border-[#27272A] rounded-xl p-3 h-full flex flex-col justify-between relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all duration-300">
           <div className="absolute -right-3 -top-3 w-10 h-10 bg-[#D4AF37]/5 rounded-full blur-md"></div>
           <div className="flex items-center gap-1 text-[9px] text-[#A1A1AA] uppercase tracking-wider">

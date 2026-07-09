@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://chain-hook-backend-evj9.vercel.app/api',
   TIMEOUT_MS: 15000,
 };
 

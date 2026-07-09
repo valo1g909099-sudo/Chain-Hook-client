@@ -11,7 +11,7 @@ interface WalletAccount {
     currency: string;
     symbol: string;
     balance: number;
-    rateToUSD: number; // 1 Unit of this currency = X USD
+    rateToUSD: number; 
 }
 
 interface PaymentPermissionPageProps {
@@ -128,13 +128,13 @@ export default function PaymentPermissionPage({
 
     return (
         <div className="min-h-screen bg-[#050508] flex items-center justify-center p-6 text-white relative overflow-hidden">
-            {/* Ambient Background Glows */}
+            {}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.02]"></div>
             <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[120px]"></div>
             <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#3EC6C0]/5 rounded-full blur-[120px]"></div>
 
             <AnimatePresence mode="wait">
-                {/* STATUS: CONSENT SCREEN */}
+                {}
                 {status === 'consent' && (
                     <motion.div 
                         key="consent"
@@ -144,7 +144,7 @@ export default function PaymentPermissionPage({
                         transition={{ duration: 0.4 }}
                         className="relative w-full max-w-[500px] p-8 rounded-3xl border border-[#27272A] bg-[#0A0A0E]/80 backdrop-blur-2xl shadow-2xl space-y-6"
                     >
-                        {/* Header */}
+                        {}
                         <div className="flex justify-between items-start border-b border-[#27272A] pb-5">
                             <div>
                                 <div className="flex items-center gap-1.5 text-[10px] text-[#D4AF37] font-semibold uppercase tracking-wider mb-1">
@@ -160,7 +160,7 @@ export default function PaymentPermissionPage({
                             </div>
                         </div>
 
-                        {/* Request Summary Card */}
+                        {}
                         <div className="bg-[#121217] rounded-2xl border border-[#27272A] overflow-hidden">
                             <div className="p-5 border-b border-[#27272A] flex justify-between items-center bg-[#15151D]/50">
                                 <div>
@@ -199,7 +199,7 @@ export default function PaymentPermissionPage({
                             </div>
                         </div>
 
-                        {/* Wallet Selector with Conversions */}
+                        {}
                         <div className="space-y-3">
                             <label className="text-[10px] uppercase font-bold tracking-widest text-[#71717A] ml-1 block">
                                 Select Payment Source Wallet
@@ -224,7 +224,7 @@ export default function PaymentPermissionPage({
                                 ))}
                             </div>
 
-                            {/* Wallet Info Summary & Live Rate Conversion */}
+                            {}
                             <div className="bg-[#121217]/50 rounded-xl p-4 border border-[#27272A] flex justify-between items-center text-xs">
                                 <div className="space-y-1">
                                     <span className="text-[#71717A] text-[10px] block">Final Cost in {activeWallet.currency}:</span>
@@ -238,14 +238,14 @@ export default function PaymentPermissionPage({
                                 </div>
                             </div>
 
-                            {/* Live rates conversion detail */}
+                            {}
                             {activeWallet.id !== 'usd' && (
                                 <p className="text-[9px] text-[#71717A] text-right italic">
                                     * Conversion rate: 1 {activeWallet.currency} = ${activeWallet.rateToUSD} USD
                                 </p>
                             )}
 
-                            {/* Insufficient Funds Warning */}
+                            {}
                             {!hasSufficientFunds && (
                                 <motion.div 
                                     initial={{ opacity: 0, y: 5 }}
@@ -276,7 +276,7 @@ export default function PaymentPermissionPage({
                             )}
                         </div>
 
-                        {/* Security Advisory & Remember Consent */}
+                        {}
                         <div className="space-y-4">
                             <label className="flex items-center gap-2.5 text-xs text-[#A1A1AA] cursor-pointer">
                                 <input 
@@ -317,7 +317,7 @@ export default function PaymentPermissionPage({
                     </motion.div>
                 )}
 
-                {/* STATUS: PROCESSING SCREEN */}
+                {}
                 {status === 'processing' && (
                     <motion.div 
                         key="processing"
@@ -349,7 +349,7 @@ export default function PaymentPermissionPage({
                     </motion.div>
                 )}
 
-                {/* STATUS: SUCCESS SCREEN */}
+                {}
                 {status === 'success' && (
                     <motion.div 
                         key="success"

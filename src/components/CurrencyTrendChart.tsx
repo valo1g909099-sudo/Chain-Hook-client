@@ -17,7 +17,7 @@ export default function CurrencyTrendChart() {
       try {
         const history = await walletService.getPriceHistory();
         if (!active || !history || history.length === 0) return;
-        // Take the latest 15 records, reverse to show chronological order
+        
         const mapped = history
           .slice(0, 15)
           .reverse()

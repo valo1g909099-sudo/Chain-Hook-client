@@ -9,7 +9,6 @@ export default function TransactionHistory({ transactions = [], analytics = null
   const [statusFilter, setStatusFilter] = useState('All');
   const itemsPerPage = 6;
 
-  // Filter transactions based on search query and status filter
   const filteredTransactions = transactions.filter(t => {
     const matchesSearch = (t.entity || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
                           (t.method || '').toLowerCase().includes(searchQuery.toLowerCase());
@@ -19,7 +18,6 @@ export default function TransactionHistory({ transactions = [], analytics = null
     return matchesSearch && matchesStatus;
   });
 
-  // Pagination calculations
   const totalItems = filteredTransactions.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -43,7 +41,7 @@ export default function TransactionHistory({ transactions = [], analytics = null
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <h3 className="text-xs font-semibold tracking-tight text-white uppercase">Transaction History</h3>
                 <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                    {/* Search Input */}
+                    {}
                     <div className="relative flex-1 sm:flex-initial">
                       <Search className="absolute left-2.5 top-2 text-[#71717A]" size={12}/>
                       <input 
@@ -54,7 +52,7 @@ export default function TransactionHistory({ transactions = [], analytics = null
                         className="pl-8 pr-3 py-1 bg-[#0D0D12] rounded-lg text-white text-[10px] border border-[#27272A] focus:border-[#D4AF37]/50 outline-none w-full sm:w-36"
                       />
                     </div>
-                    {/* Status Filter */}
+                    {}
                     <select 
                       value={statusFilter} 
                       onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
@@ -65,14 +63,14 @@ export default function TransactionHistory({ transactions = [], analytics = null
                       <option value="Pending">Pending</option>
                       <option value="Failed">Failed</option>
                     </select>
-                    {/* Export */}
+                    {}
                     <button className="flex items-center gap-1.5 px-3 py-1 bg-[#0D0D12] rounded-lg text-white text-[10px] border border-[#27272A] hover:border-[#D4AF37]/50 transition-colors">
                         <FileDown size={12}/> Export
                     </button>
                 </div>
             </div>
             
-            {/* Scrollable Table Container */}
+            {}
             <div className="overflow-x-auto -mx-6 px-6">
               <table className="w-full text-left min-w-[500px]">
                 <thead className="text-[10px] text-[#52525B] uppercase border-b border-[#1F1F23]">
@@ -115,7 +113,7 @@ export default function TransactionHistory({ transactions = [], analytics = null
             </div>
           </div>
             
-          {/* Pagination Controls */}
+          {}
           {totalItems > 0 && (
             <div className="flex items-center justify-between border-t border-[#1F1F23] pt-4 mt-6 text-[10px] text-[#71717A]">
               <span>
