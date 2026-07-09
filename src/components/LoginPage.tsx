@@ -214,7 +214,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full bg-[#121218] text-white px-4 py-3 rounded-xl text-sm border border-zinc-800/80 focus:border-[#D4AF37]/50 focus:outline-none transition-all duration-200"
-                  placeholder="Alex Morgan"
+                  placeholder="you"
                   required
                 />
               </div>
@@ -229,7 +229,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-[#121218] text-white pl-11 pr-4 py-3 rounded-xl text-sm border border-zinc-800/80 focus:border-[#D4AF37]/50 focus:outline-none transition-all duration-200"
-                  placeholder="alex.morgan@chainhook.com"
+                  placeholder="you@chainhook.com"
                   required
                 />
               </div>
@@ -244,7 +244,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-[#121218] text-white pl-11 pr-11 py-3 rounded-xl text-sm border border-zinc-800/80 focus:border-[#D4AF37]/50 focus:outline-none transition-all duration-200"
-                  placeholder="••••••••"
+                  placeholder="XXXXXX"
                   required
                 />
                 <button
@@ -265,7 +265,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full bg-[#121218] text-white px-4 py-3 rounded-xl text-sm border border-zinc-800/80 focus:border-[#D4AF37]/50 focus:outline-none transition-all duration-200"
-                  placeholder="••••••••"
+                  placeholder="XXXXXX"
                   required
                 />
               </div>
