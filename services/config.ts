@@ -25,6 +25,10 @@ export const ENDPOINTS = {
     ANALYTICS: '/wallet/analytics/',
   },
 
+  CLIENTS: {
+    GENERATE_TOKEN: '/users/clients/generate-token/',
+    VALIDATE_TOKEN: '/users/clients/validate-token/',
+  },
 };
 
 export const STORAGE_KEYS = {
