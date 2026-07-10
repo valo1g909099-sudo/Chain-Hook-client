@@ -125,7 +125,15 @@ function AppLayout() {
 type ValidationState =
   | { status: 'loading' }
   | { status: 'valid'; client: any; payload: any }
-  | { status: 'error'; reason: string; message: string; details: any; decodedPayload?: any };
+  | { status: 'error'; reason: string; message: string };
+
+type ConsentResult =
+  | null
+  | { kind: 'payment_success'; txId: string; displayAmount: string; rawAmount: string; merchant: string }
+  | { kind: 'payment_failed'; message: string }
+  | { kind: 'payment_denied'; merchant: string }
+  | { kind: 'login_success'; merchant: string }
+  | { kind: 'login_denied'; merchant: string };
 
 function AuthorizePage() {
   const [searchParams] = useSearchParams();
@@ -137,7 +145,26 @@ function AuthorizePage() {
     return saved ? JSON.parse(saved) : DEFAULT_BALANCES;
   });
 
+  const [transactions, setTransactions] = useState<any[]>(() => {
+    const saved = localStorage.getItem('ewallet_transactions');
+    return saved ? JSON.parse(saved) : DEFAULT_TRANSACTIONS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('ewallet_balances', JSON.stringify(balances));
+  }, [balances]);
+
+  useEffect(() => {
+    localStorage.setItem('ewallet_transactions', JSON.stringify(transactions));
+  }, [transactions]);
+
   const [validation, setValidation] = useState<ValidationState>({ status: 'loading' });
+
+  // Shown after the user acts on the consent screen (grant/deny), instead
+  // of redirecting silently. Fixes: "when transaction successful or failed
+  // it not show any message box" — previously handleGrantConsent/handleDenyConsent
+  // redirected immediately with no confirmation UI at all.
+  const [consentResult, setConsentResult] = useState<ConsentResult>(null);
 
   const clientId   = searchParams.get('client_id');
   const type       = searchParams.get('type');
@@ -157,20 +184,19 @@ function AuthorizePage() {
         status: 'error',
         reason: 'missing_client_id',
         message: 'No client_id was provided in the authorization request.',
-        details: {},
       });
       return;
     }
 
-    let localPayload: any = null;
-    try {
-      localPayload = JSON.parse(atob(clientId));
-    } catch (_) {
-      
-    }
-
+    // IMPORTANT: client_id is now a server-signed token (produced by
+    // GenerateClientTokenView), not a raw base64(JSON) string. It must
+    // be verified against /clients/validate-token/ (ValidateClientTokenView).
+    // The old /auth/validate-client/ endpoint expected raw base64 JSON
+    // and has been removed from the backend — pointing at it here would
+    // 400 or crash with a decode error on every real token.
     const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
-    const url = `${apiBase}/users/auth/validate-client/?client_id=${encodeURIComponent(clientId)}`;
+    const url = `${apiBase}/users/clients/validate-token/?client_id=${encodeURIComponent(clientId)}`;
+
     fetch(url)
       .then(async (res) => {
         const data = await res.json();
@@ -179,10 +205,8 @@ function AuthorizePage() {
         } else {
           setValidation({
             status: 'error',
-            reason: data.reason,
-            message: data.message,
-            details: data.details || {},
-            decodedPayload: localPayload,
+            reason: data.reason || 'invalid_token',
+            message: data.message || 'This authorization token is invalid.',
           });
         }
       })
@@ -191,15 +215,13 @@ function AuthorizePage() {
           status: 'error',
           reason: 'network_error',
           message: 'Unable to reach the Chain Hook validation service. Please check that the server is running.',
-          details: {},
-          decodedPayload: localPayload,
         });
       });
   }, [clientId]);
 
   useEffect(() => {
     const favicon = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-    
+
     if (validation.status === 'valid') {
       const platformName = validation.payload?.platform_name || validation.payload?.merchant_name || 'Chain Hook';
       document.title = `${platformName} - Chain Hook Secure Gateway`;
@@ -217,7 +239,7 @@ function AuthorizePage() {
         favicon.href = '/assets/logo/logo.png';
       }
     }
-    
+
     return () => {
       document.title = 'Chain Hook';
       if (favicon) {
@@ -238,8 +260,15 @@ function AuthorizePage() {
   }
 
   if (validation.status === 'error') {
-    const { reason, message, details, decodedPayload } = validation;
+    const { reason, message } = validation;
 
+    // The backend now only ever returns 'missing_client_id' or
+    // 'invalid_token' (expired / tampered / unknown client) as reasons.
+    // The old fine-grained reasons (decode_error, missing_payload_fields,
+    // invalid_type, client_name_not_found, base_url_mismatch,
+    // flow_not_permitted) belonged to the removed base64 validator and
+    // no longer apply, since the server now validates everything itself
+    // before ever signing a token in GenerateClientTokenView.
     const reasonMeta: Record<string, { title: string; color: string; icon: React.ReactNode }> = {
       missing_client_id: {
         title: 'Missing Client ID',
@@ -251,63 +280,13 @@ function AuthorizePage() {
           </svg>
         ),
       },
-      decode_error: {
-        title: 'Invalid Encoding',
+      invalid_token: {
+        title: 'Invalid Authorization Token',
         color: 'orange',
         icon: (
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
             <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-        ),
-      },
-      missing_payload_fields: {
-        title: 'Incomplete Payload',
-        color: 'orange',
-        icon: (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/>
-            <line x1="9" y1="15" x2="15" y2="15"/>
-          </svg>
-        ),
-      },
-      invalid_type: {
-        title: 'Invalid Flow Type',
-        color: 'orange',
-        icon: (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-          </svg>
-        ),
-      },
-      client_name_not_found: {
-        title: 'Unknown Client Application',
-        color: 'red',
-        icon: (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/>
-          </svg>
-        ),
-      },
-      base_url_mismatch: {
-        title: 'URL Mismatch Detected',
-        color: 'red',
-        icon: (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
-        ),
-      },
-      flow_not_permitted: {
-        title: 'Flow Not Permitted',
-        color: 'red',
-        icon: (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         ),
       },
@@ -369,121 +348,17 @@ function AuthorizePage() {
             </div>
 
             {}
-            {decodedPayload && (
-              <div className="bg-[#111118] border border-[#1F1F27] rounded-2xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#1F1F27]">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717A" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                  <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-500">Decoded Payload (for reference)</span>
-                </div>
-                <div className="p-4 grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
-                  {[
-                    ['Platform', decodedPayload.platform_name],
-                    ['URL', decodedPayload.platform_url],
-                    ['Type', decodedPayload.type],
-                    ['Merchant', decodedPayload.merchant_name],
-                    ['Price', decodedPayload.total_price],
-                  ].filter(([, v]) => v).map(([label, value]) => (
-                    <div key={label}>
-                      <span className="text-[#52525B] block text-[9px] uppercase tracking-widest">{label}</span>
-                      <span className="text-white font-mono">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {}
             <div className="bg-[#0D0D14] border border-[#1C1C24] rounded-2xl p-5 space-y-3 text-xs">
               <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-600 block border-b border-[#1C1C24] pb-2.5">
                 Failure Analysis
               </span>
 
               {reason === 'missing_client_id' && (
-                <ErrorRow color={accentColor} title="No client_id parameter" desc="The authorization URL must include a ?client_id= query parameter containing a Base64-encoded JSON payload." />
+                <ErrorRow color={accentColor} title="No client_id parameter" desc="The authorization URL must include a ?client_id= query parameter containing a signed token from the OAuth Console." />
               )}
 
-              {reason === 'decode_error' && (
-                <>
-                  <ErrorRow color={accentColor} title="Base64 decode failed" desc="The provided client_id is not a valid Base64 string or does not contain valid JSON." />
-                  {details.error && (
-                    <div className="mt-2 bg-[#0A0A0F] rounded-xl p-3 font-mono text-[10px] text-[#D4AF37] border border-[#27272A]">
-                      {details.error}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {reason === 'missing_payload_fields' && (
-                <>
-                  <ErrorRow color={accentColor} title="Payload is incomplete" desc="The decoded JSON object is missing one or more required fields." />
-                  {details.missing_fields && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {details.missing_fields.map((f: string) => (
-                        <span key={f} className="bg-red-500/10 border border-red-500/25 text-red-400 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold">
-                          {f}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {reason === 'invalid_type' && (
-                <>
-                  <ErrorRow color={accentColor} title="Unrecognized flow type" desc="The 'type' field in the payload must be exactly 'login' or 'payment'." />
-                  {details.received_type && (
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-zinc-500">Received:</span>
-                      <code className="text-[#D4AF37] font-mono bg-[#D4AF37]/5 px-2 py-0.5 rounded">{details.received_type}</code>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {reason === 'client_name_not_found' && (
-                <>
-                  <ErrorRow color={accentColor} title="Client not registered" desc="No active client application with this name is registered in the Chain Hook platform." />
-                  {details.platform_name && (
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-zinc-500">Searched for:</span>
-                      <code className="text-white font-mono bg-[#1C1C24] px-2 py-0.5 rounded">{details.platform_name}</code>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {reason === 'base_url_mismatch' && (
-                <>
-                  <ErrorRow color={accentColor} title="Base URL does not match" desc="A client with this name was found, but the platform_url in the payload does not match its registered base URL." />
-                  <div className="space-y-1.5 mt-1">
-                    <div className="flex items-start gap-2">
-                      <span className="text-red-400 mt-0.5">✗</span>
-                      <div>
-                        <span className="text-zinc-500 text-[9px] block uppercase tracking-widest">Provided URL</span>
-                        <code className="text-red-300 font-mono text-[10px]">{details.provided_url}</code>
-                      </div>
-                    </div>
-                    {details.registered_urls?.map((u: string) => (
-                      <div key={u} className="flex items-start gap-2">
-                        <span className="text-emerald-400 mt-0.5">✓</span>
-                        <div>
-                          <span className="text-zinc-500 text-[9px] block uppercase tracking-widest">Registered URL</span>
-                          <code className="text-emerald-300 font-mono text-[10px]">{u}</code>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {reason === 'flow_not_permitted' && (
-                <>
-                  <ErrorRow color={accentColor} title="Flow type not authorized" desc="This client application is not permitted to initiate this type of authorization flow." />
-                  <div className="flex gap-3 mt-1">
-                    <PermBadge label="Login" allowed={details.for_login} />
-                    <PermBadge label="Payment" allowed={details.for_payment} />
-                  </div>
-                </>
+              {reason === 'invalid_token' && (
+                <ErrorRow color={accentColor} title="Token rejected by server" desc={message} />
               )}
 
               {reason === 'network_error' && (
@@ -497,7 +372,7 @@ function AuthorizePage() {
               <span className="text-[#D4AF37] font-semibold cursor-pointer" onClick={() => navigate('/test-auth-generator')}>
                 Developer OAuth Console
               </span>{' '}
-              to generate a correctly encoded payload. Make sure the <code>platform_name</code> and <code>platform_url</code> match an active registered client in the Chain Hook system.
+              to generate a fresh signed token. Tokens expire after 10 minutes, so links older than that will always land here.
             </div>
 
             {}
@@ -534,53 +409,24 @@ function AuthorizePage() {
   const finalAmount      = validatedPayload?.total_price || amount;
   const finalRedirectUri = validatedPayload?.platform_url || redirectUri;
 
-  if (finalType === 'payment') {
-    const merchantName = finalAppName ?? finalClientId;
-
-    const handleGrantConsent = async (walletType: string, finalAmountPaid: string, finalSymbol: string): Promise<void> => {
-      const numericAmount = parseFloat(finalAmountPaid.replace(/[^0-9.]/g, '')) || 0;
-      const currency = walletType.toUpperCase() as 'USD' | 'EUR' | 'GBP' | 'JPY';
-
-      const result = await walletService.payment(
-        currency,
-        numericAmount,
-        merchantName,
-        'Chain Hook Secure Pay'
-      );
-
-      const w = result.wallet;
-      setBalances({
-        usd: parseFloat(String(w.USD)) || 0,
-        eur: parseFloat(String(w.EUR)) || 0,
-        gbp: parseFloat(String(w.GBP)) || 0,
-        jpy: parseFloat(String(w.JPY)) || 0,
-      });
-
-      const txId = result.tx_id || 'TX-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-
-      const newTx: TransactionItem = {
-        entity: merchantName,
-        date:
-          new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
-          ', ' +
-          new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false }),
-        method: 'Chain Hook Secure Pay',
-        amount: `-${finalSymbol}${numericAmount.toFixed(2)}`,
-        status: 'Success',
-      };
-      setTransactions(prev => [newTx, ...prev]);
-
+  // Once the user has acted, show a result screen first — never redirect
+  // silently. The "Continue" button on that screen performs the actual
+  // redirect/navigation, using the values captured in consentResult.
+  if (consentResult) {
+    const proceedPaymentSuccess = () => {
+      if (consentResult.kind !== 'payment_success') return;
+      const { txId, rawAmount } = consentResult;
       if (finalRedirectUri === 'MerchantSandbox') {
-        navigate(`/merchant-sandbox?payment_success=true&amount=${encodeURIComponent(finalAmountPaid)}&tx_id=${txId}`);
+        navigate(`/merchant-sandbox?payment_success=true&amount=${encodeURIComponent(rawAmount)}&tx_id=${txId}`);
       } else if (finalRedirectUri) {
         const separator = finalRedirectUri.includes('?') ? '&' : '?';
-        window.location.href = `${finalRedirectUri}${separator}payment_success=true&amount=${encodeURIComponent(finalAmountPaid)}&tx_id=${txId}`;
+        window.location.href = `${finalRedirectUri}${separator}payment_success=true&amount=${encodeURIComponent(rawAmount)}&tx_id=${txId}`;
       } else {
         navigate('/dashboard');
       }
     };
 
-    const handleDenyConsent = () => {
+    const proceedPaymentDenied = () => {
       if (finalRedirectUri === 'MerchantSandbox') {
         navigate('/merchant-sandbox?payment_cancelled=true');
       } else if (finalRedirectUri) {
@@ -589,6 +435,97 @@ function AuthorizePage() {
       } else {
         navigate('/dashboard');
       }
+    };
+
+    const proceedLoginSuccess = () => {
+      if (finalRedirectUri) {
+        const separator = finalRedirectUri.includes('?') ? '&' : '?';
+        window.location.href = `${finalRedirectUri}${separator}status=success&email=${encodeURIComponent(user?.email || '')}`;
+      } else {
+        navigate('/dashboard');
+      }
+    };
+
+    const proceedLoginDenied = () => {
+      if (finalRedirectUri) {
+        const separator = finalRedirectUri.includes('?') ? '&' : '?';
+        window.location.href = `${finalRedirectUri}${separator}error=access_denied`;
+      } else {
+        navigate('/dashboard');
+      }
+    };
+
+    return (
+      <ConsentResultScreen
+        result={consentResult}
+        onContinue={() => {
+          if (consentResult.kind === 'payment_success') proceedPaymentSuccess();
+          else if (consentResult.kind === 'payment_denied') proceedPaymentDenied();
+          else if (consentResult.kind === 'login_success') proceedLoginSuccess();
+          else if (consentResult.kind === 'login_denied') proceedLoginDenied();
+        }}
+        onRetry={() => setConsentResult(null)}
+      />
+    );
+  }
+
+  if (finalType === 'payment') {
+    const merchantName = finalAppName ?? finalClientId;
+
+    const handleGrantConsent = async (walletType: string, finalAmountPaid: string, finalSymbol: string): Promise<void> => {
+      try {
+        const numericAmount = parseFloat(finalAmountPaid.replace(/[^0-9.]/g, '')) || 0;
+        const currency = walletType.toUpperCase() as 'USD' | 'EUR' | 'GBP' | 'JPY';
+
+        const result = await walletService.payment(
+          currency,
+          numericAmount,
+          merchantName,
+          'Chain Hook Secure Pay'
+        );
+
+        const w = result.wallet;
+        setBalances({
+          usd: parseFloat(String(w.USD)) || 0,
+          eur: parseFloat(String(w.EUR)) || 0,
+          gbp: parseFloat(String(w.GBP)) || 0,
+          jpy: parseFloat(String(w.JPY)) || 0,
+        });
+
+        const txId = result.tx_id || 'TX-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        const newTx: TransactionItem = {
+          entity: merchantName,
+          date:
+            new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
+            ', ' +
+            new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false }),
+          method: 'Chain Hook Secure Pay',
+          amount: `-${finalSymbol}${numericAmount.toFixed(2)}`,
+          status: 'Success',
+        };
+        setTransactions(prev => [newTx, ...prev]);
+
+        setConsentResult({
+          kind: 'payment_success',
+          txId,
+          displayAmount: `${finalSymbol}${numericAmount.toFixed(2)}`,
+          rawAmount: finalAmountPaid,
+          merchant: merchantName,
+        });
+      } catch (err) {
+        // This is the "when transaction ... failed it not show any message
+        // box" case — a thrown/rejected walletService.payment call used to
+        // have nowhere to go. Now it surfaces a proper failure screen.
+        setConsentResult({
+          kind: 'payment_failed',
+          message: err instanceof Error ? err.message : 'The payment could not be completed. Please try again.',
+        });
+      }
+    };
+
+    const handleDenyConsent = () => {
+      setConsentResult({ kind: 'payment_denied', merchant: merchantName });
     };
 
     return (
@@ -603,22 +540,14 @@ function AuthorizePage() {
   }
 
   if (finalType === 'login') {
+    const merchantName = finalAppName ?? finalClientId ?? 'this application';
+
     const handleAllow = () => {
-      if (finalRedirectUri) {
-        const separator = finalRedirectUri.includes('?') ? '&' : '?';
-        window.location.href = `${finalRedirectUri}${separator}status=success&email=${encodeURIComponent(user?.email || '')}`;
-      } else {
-        navigate('/dashboard');
-      }
+      setConsentResult({ kind: 'login_success', merchant: merchantName });
     };
 
     const handleDeny = () => {
-      if (finalRedirectUri) {
-        const separator = finalRedirectUri.includes('?') ? '&' : '?';
-        window.location.href = `${finalRedirectUri}${separator}error=access_denied`;
-      } else {
-        navigate('/dashboard');
-      }
+      setConsentResult({ kind: 'login_denied', merchant: merchantName });
     };
 
     return (
@@ -638,6 +567,140 @@ function AuthorizePage() {
   return <Navigate to="/dashboard" replace />;
 }
 
+function ConsentResultScreen({
+  result,
+  onContinue,
+  onRetry,
+}: {
+  result: Exclude<ConsentResult, null>;
+  onContinue: () => void;
+  onRetry: () => void;
+}) {
+  const isSuccess = result.kind === 'payment_success' || result.kind === 'login_success';
+  const isFailure = result.kind === 'payment_failed';
+
+  const color = isSuccess ? 'emerald' : isFailure ? 'red' : 'zinc';
+  const borderColor = isSuccess ? 'border-emerald-500/20' : isFailure ? 'border-red-500/20' : 'border-zinc-600/20';
+  const topBarColor  = isSuccess ? 'bg-emerald-500' : isFailure ? 'bg-red-500' : 'bg-zinc-500';
+  const iconBg       = isSuccess ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400' : isFailure ? 'bg-red-500/10 border-red-500/25 text-red-400' : 'bg-zinc-700/30 border-zinc-600/25 text-zinc-400';
+  const glowBg       = isSuccess ? 'bg-emerald-500/5' : isFailure ? 'bg-red-500/5' : 'bg-zinc-500/5';
+  const buttonColor  = isSuccess
+    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20'
+    : isFailure
+    ? 'bg-red-500/10 border-red-500/30 text-red-300 hover:bg-red-500/20'
+    : 'bg-zinc-700/20 border-zinc-600/30 text-zinc-300 hover:bg-zinc-700/30';
+
+  let title = '';
+  let message = '';
+  let continueLabel = 'Continue';
+
+  switch (result.kind) {
+    case 'payment_success':
+      title = 'Payment Successful';
+      message = `${result.displayAmount} was sent to ${result.merchant}.`;
+      continueLabel = 'Continue';
+      break;
+    case 'payment_failed':
+      title = 'Payment Declined';
+      message = result.message;
+      continueLabel = 'Try Again';
+      break;
+    case 'payment_denied':
+      title = 'Payment Cancelled';
+      message = `You declined the payment request from ${result.merchant}.`;
+      continueLabel = 'Continue';
+      break;
+    case 'login_success':
+      title = 'Access Granted';
+      message = `${result.merchant} has been signed in successfully.`;
+      continueLabel = 'Continue';
+      break;
+    case 'login_denied':
+      title = 'Access Denied';
+      message = `You declined the login request from ${result.merchant}.`;
+      continueLabel = 'Continue';
+      break;
+  }
+
+  const icon = isSuccess ? (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <polyline points="22 4 12 14.01 9 11.01" />
+    </svg>
+  ) : isFailure ? (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="15" y1="9" x2="9" y2="15" />
+      <line x1="9" y1="9" x2="15" y2="15" />
+    </svg>
+  ) : (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+    </svg>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#050508] flex items-center justify-center p-4 text-white relative overflow-hidden font-sans">
+      <div className={`absolute top-[-15%] left-[-10%] w-[500px] h-[500px] ${glowBg} rounded-full blur-[160px] pointer-events-none`} />
+      <div className="absolute bottom-[-15%] right-[-10%] w-[500px] h-[500px] bg-[#D4AF37]/3 rounded-full blur-[160px] pointer-events-none" />
+
+      <div className={`w-full max-w-[480px] rounded-3xl border ${borderColor} bg-[#0A0A0E]/90 backdrop-blur-2xl shadow-2xl overflow-hidden`}>
+        <div className={`h-1 w-full ${topBarColor}`} />
+
+        <div className="p-8 space-y-6">
+          <div className="flex flex-col items-center text-center space-y-3">
+            <div className={`p-4 rounded-2xl border ${iconBg} shadow-lg`}>
+              {icon}
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border bg-[#D4AF37]/5 border-[#D4AF37]/20 text-[#D4AF37] mb-2">
+                <span>Chain Hook Security Gateway</span>
+              </div>
+              <h2 className="text-xl font-bold tracking-tight text-white">{title}</h2>
+              <p className="text-xs text-[#9A9AA5] leading-relaxed mt-1.5 max-w-xs mx-auto">{message}</p>
+            </div>
+          </div>
+
+          {result.kind === 'payment_success' && (
+            <div className="bg-[#111118] border border-[#1F1F27] rounded-2xl p-4 text-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[#52525B] text-[9px] uppercase tracking-widest">Transaction ID</span>
+                <span className="text-white font-mono">{result.txId}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[#52525B] text-[9px] uppercase tracking-widest">Amount</span>
+                <span className="text-emerald-400 font-mono font-semibold">{result.displayAmount}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[#52525B] text-[9px] uppercase tracking-widest">Merchant</span>
+                <span className="text-white font-mono">{result.merchant}</span>
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            {result.kind === 'payment_failed' && (
+              <button
+                onClick={onRetry}
+                className="flex-1 py-3 rounded-xl border border-[#27272A] bg-[#0A0A0E] text-xs font-semibold text-[#A1A1AA] hover:text-white hover:border-zinc-600 transition-all"
+              >
+                Back to Payment
+              </button>
+            )}
+            <button
+              onClick={onContinue}
+              className={`flex-1 py-3 rounded-xl border text-xs font-bold transition-all ${buttonColor}`}
+            >
+              {continueLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ErrorRow({ color, title, desc }: { color: string; title: string; desc: string }) {
   return (
     <div className="flex items-start gap-2.5">
@@ -646,19 +709,6 @@ function ErrorRow({ color, title, desc }: { color: string; title: string; desc: 
         <strong className="text-white">{title}: </strong>
         <span className="text-[#9A9AA5]">{desc}</span>
       </p>
-    </div>
-  );
-}
-
-function PermBadge({ label, allowed }: { label: string; allowed: boolean }) {
-  return (
-    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[10px] font-bold ${
-      allowed
-        ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
-        : 'bg-red-500/10 border-red-500/25 text-red-400'
-    }`}>
-      <span>{allowed ? '✓' : '✗'}</span>
-      <span>{label}</span>
     </div>
   );
 }
@@ -740,18 +790,13 @@ function LoginRoute() {
     return <Navigate to="/dashboard" replace />;
   }
 
-  let decodedPayload: any = null;
-  if (clientId) {
-    try {
-      decodedPayload = JSON.parse(atob(clientId));
-    } catch (_) {
-      
-    }
-  }
-
-  const finalType = decodedPayload?.type || type;
-  const finalAppName = decodedPayload?.platform_name || decodedPayload?.merchant_name || searchParams.get('app_name') || searchParams.get('merchant_name');
-  const finalAmount = decodedPayload?.total_price || searchParams.get('amount') || '$0.00';
+  // client_id is a signed, opaque token now — it cannot be decoded on
+  // the client side, so we only use the plain query params here for the
+  // pre-login notice. The authoritative check happens in AuthorizePage
+  // via /clients/validate-token/ after the user logs in.
+  const finalType = type;
+  const finalAppName = searchParams.get('app_name') || searchParams.get('merchant_name');
+  const finalAmount = searchParams.get('amount') || '$0.00';
 
   let oauthNotice = undefined;
   if (finalType === 'payment') {
