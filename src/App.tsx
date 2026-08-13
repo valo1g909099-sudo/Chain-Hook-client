@@ -108,13 +108,13 @@ function AppLayout() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#0A0A0B] text-[#E4E4E7]">
+    <div className="flex flex-col md:flex-row min-h-screen w-full bg-[#0A0A0B] text-[#E4E4E7] overflow-x-hidden">
       <Sidebar onLogout={handleLogout} />
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <div className="p-4 sm:p-8 pb-0 flex-shrink-0">
+      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
+        <div className="p-3 sm:p-8 pb-0 flex-shrink-0">
           <Header onLogout={handleLogout} />
         </div>
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 pt-4">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-8 pt-2 sm:pt-4">
           <Outlet context={{ balances, setBalances, transactions, setTransactions, analytics, setAnalytics }} />
         </div>
       </div>

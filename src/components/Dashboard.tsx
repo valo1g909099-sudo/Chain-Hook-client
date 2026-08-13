@@ -24,52 +24,52 @@ export default function Dashboard({
   return (
     <div className="space-y-6 bg-[#0D0D12] text-white">
       <QuickActions />
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="glass p-5 rounded-2xl border border-[#D4AF37]/20 hover:border-[#D4AF37]/50 transition-all duration-300 shadow-md">
-          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-2">USD Balance</div>
-          <div className="text-xl font-semibold font-mono text-white">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-6">
+        <div className="glass p-4 sm:p-5 rounded-2xl border border-[#D4AF37]/20 hover:border-[#D4AF37]/50 transition-all duration-300 shadow-md">
+          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-1 sm:mb-2">USD Balance</div>
+          <div className="text-lg sm:text-xl font-semibold font-mono text-white truncate">
             ${balances.usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className="text-[10px] text-[#3EC6C0]">Verified account with instant withdrawal access.</div>
+          <div className="text-[10px] text-[#3EC6C0] mt-1">Verified account with instant withdrawal access.</div>
         </div>
-        <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
-          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-2">EUR Balance</div>
-          <div className="text-xl font-semibold font-mono text-white">
+        <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-1 sm:mb-2">EUR Balance</div>
+          <div className="text-lg sm:text-xl font-semibold font-mono text-white truncate">
             €{balances.eur.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className="text-[10px] text-[#9A9AA5]">
-            Currently valued at approximately ${(balances.eur * 1.09).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD based on current market rates.
+          <div className="text-[10px] text-[#9A9AA5] mt-1">
+            Valued at approx ${(balances.eur * 1.09).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD.
           </div>
         </div>
-        <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
-          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-2">GBP Balance</div>
-          <div className="text-xl font-semibold font-mono text-white">
+        <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-1 sm:mb-2">GBP Balance</div>
+          <div className="text-lg sm:text-xl font-semibold font-mono text-white truncate">
             £{balances.gbp.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className="text-[10px] text-[#9A9AA5]">
-            Currently valued at approximately ${(balances.gbp * 1.30).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD based on current market rates.
+          <div className="text-[10px] text-[#9A9AA5] mt-1">
+            Valued at approx ${(balances.gbp * 1.30).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD.
           </div>
         </div>
-        <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
-          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-2">JPY Balance</div>
-          <div className="text-xl font-semibold font-mono text-white">
+        <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-1 sm:mb-2">JPY Balance</div>
+          <div className="text-lg sm:text-xl font-semibold font-mono text-white truncate">
             ¥{balances.jpy.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className="text-[10px] text-[#9A9AA5]">
-            Currently valued at approximately ${(balances.jpy * 0.0065).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD based on current market rates.
+          <div className="text-[10px] text-[#9A9AA5] mt-1">
+            Valued at approx ${(balances.jpy * 0.0065).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD.
           </div>
         </div>
-        <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
-          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-2">Total Assets</div>
-          <div className="text-xl font-semibold font-mono text-white">
+        <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+          <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider mb-1 sm:mb-2">Total Assets</div>
+          <div className="text-lg sm:text-xl font-semibold font-mono text-white truncate">
             ${totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className="text-[10px] text-[#3EC6C0]">Consolidated value of all holdings across verified sub-accounts.</div>
+          <div className="text-[10px] text-[#3EC6C0] mt-1">Consolidated value of all holdings across verified sub-accounts.</div>
         </div>
       </section>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-6">
+        <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
            <div className="flex items-center gap-2 mb-2">
              <div className="w-1.5 h-1.5 rounded-full bg-[#3EC6C0]"></div>
              <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">Market Sentiment</div>
@@ -77,7 +77,7 @@ export default function Dashboard({
            <div className="text-sm font-medium text-white mb-1">Bullish Trend</div>
            <div className="text-[10px] text-[#9A9AA5]">Market indicators suggest a sustained bullish phase in major pairs for the next 24-48 hours.</div>
          </div>
-         <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+         <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
            <div className="flex items-center gap-2 mb-2">
              <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></div>
              <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">Portfolio Health</div>
@@ -85,19 +85,19 @@ export default function Dashboard({
            <div className="text-sm font-medium text-white mb-1">Stable</div>
            <div className="text-[10px] text-[#9A9AA5]">Risk assessment indicates a stable, well-diversified profile across multiple asset classes.</div>
          </div>
-         <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+         <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
            <div className="flex items-center gap-2 mb-2">
              <div className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B]"></div>
              <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">Active Limit</div>
            </div>
-           <div className="text-sm font-medium text-white mb-1 font-mono">
+           <div className="text-sm font-medium text-white mb-1 font-mono truncate">
              ${useLmt.toLocaleString(undefined, { minimumFractionDigits: 2 })} / ${maxLmt.toLocaleString(undefined, { minimumFractionDigits: 2 })}
            </div>
            <div className="text-[10px] text-[#9A9AA5]">
              Daily transaction limit status. Remaining: ${(maxLmt - useLmt).toLocaleString(undefined, { minimumFractionDigits: 2 })}.
            </div>
          </div>
-         <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+         <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
            <div className="flex items-center gap-2 mb-2">
              <div className="w-1.5 h-1.5 rounded-full bg-[#3EC6C0]"></div>
              <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">Recent Alerts</div>
@@ -105,7 +105,7 @@ export default function Dashboard({
            <div className="text-sm font-medium text-white mb-1">Login Alert</div>
            <div className="text-[10px] text-[#9A9AA5]">New login detected on a recognized device in a different region.</div>
          </div>
-         <div className="glass p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+         <div className="glass p-4 sm:p-5 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
            <div className="flex items-center gap-2 mb-2">
              <div className="w-1.5 h-1.5 rounded-full bg-[#3EC6C0]"></div>
              <div className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">System Status</div>

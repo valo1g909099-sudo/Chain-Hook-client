@@ -53,14 +53,14 @@ export default function TransactionTable({ transactions = [] }: { transactions?:
   };
 
   return (
-    <div className="glass p-6 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
-      <div className="flex justify-between items-center mb-6">
+    <div className="glass p-4 sm:p-6 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+      <div className="flex flex-wrap justify-between items-center gap-2 mb-4 sm:mb-6">
         <div>
             <h3 className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">Recent Transactions</h3>
             <p className="text-[10px] text-[#52525B]">Overview of your latest financial activity and status.</p>
         </div>
         <select 
-          className="bg-[#0D0D12] border border-[#27272A] rounded-lg px-3 py-1 text-[10px] text-white focus:outline-none focus:border-[#D4AF37]/50 cursor-pointer"
+          className="bg-[#0D0D12] border border-[#27272A] rounded-lg px-2.5 py-1 text-[10px] text-white focus:outline-none focus:border-[#D4AF37]/50 cursor-pointer"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         >
@@ -69,8 +69,8 @@ export default function TransactionTable({ transactions = [] }: { transactions?:
           <option value="Received">Received (Credits)</option>
         </select>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-[11px]">
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full text-left text-[11px] min-w-[420px]">
           <thead>
             <tr className="text-[#9A9AA5]">
               <th className="pb-3 pl-2">Entity</th>
@@ -92,21 +92,21 @@ export default function TransactionTable({ transactions = [] }: { transactions?:
                 const isDebit = t.amount.startsWith('-');
                 return (
                   <tr key={i} className="border-t border-[#1C1C24] hover:bg-[#D4AF37]/5 transition-colors">
-                    <td className="py-3 pl-2 font-semibold flex items-center gap-2">
-                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${isDebit ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
+                    <td className="py-3 pl-2 font-semibold flex items-center gap-2 whitespace-nowrap">
+                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isDebit ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
                         {isDebit ? <ArrowDownLeft size={12} /> : <ArrowUpRight size={12} />}
                       </div>
                       {t.entity}
                     </td>
-                    <td className="py-3 text-[#71717A]">{t.date}</td>
-                    <td className="py-3 text-[#A1A1AA]">{t.method}</td>
-                    <td className="py-3">
+                    <td className="py-3 text-[#71717A] whitespace-nowrap">{t.date}</td>
+                    <td className="py-3 text-[#A1A1AA] whitespace-nowrap">{t.method}</td>
+                    <td className="py-3 whitespace-nowrap">
                       <span className={`px-2 py-0.5 rounded-full text-[9px] inline-flex items-center gap-1 ${getStatusClass(t.status)}`}>
                         {getStatusIcon(t.status)}
                         {t.status}
                       </span>
                     </td>
-                    <td className={`py-3 pr-2 text-right font-mono font-bold ${isDebit ? 'text-red-400' : 'text-[#3EC6C0]'}`}>
+                    <td className={`py-3 pr-2 text-right font-mono font-bold whitespace-nowrap ${isDebit ? 'text-red-400' : 'text-[#3EC6C0]'}`}>
                       {t.amount}
                     </td>
                   </tr>

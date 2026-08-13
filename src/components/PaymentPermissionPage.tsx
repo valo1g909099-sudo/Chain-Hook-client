@@ -142,7 +142,7 @@ export default function PaymentPermissionPage({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: -15 }}
                         transition={{ duration: 0.4 }}
-                        className="relative w-full max-w-[500px] p-8 rounded-3xl border border-[#27272A] bg-[#0A0A0E]/80 backdrop-blur-2xl shadow-2xl space-y-6"
+                        className="relative w-full max-w-[500px] p-4 sm:p-8 rounded-3xl border border-[#27272A] bg-[#0A0A0E]/80 backdrop-blur-2xl shadow-2xl space-y-6"
                     >
                         {}
                         <div className="flex justify-between items-start border-b border-[#27272A] pb-5">

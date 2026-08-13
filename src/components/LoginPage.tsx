@@ -100,33 +100,32 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
 
   return (
     <div className="min-h-screen bg-[#050508] flex flex-col lg:flex-row text-white relative overflow-hidden font-sans">
-      {}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.02] pointer-events-none"></div>
 
-      {}
-      <div className="w-full lg:w-[55%] flex flex-col justify-between p-8 lg:p-16 relative overflow-hidden min-h-[45vh] lg:min-h-screen">
-        {}
-        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-[10%] right-[-10%] w-80 h-80 bg-[#3EC6C0]/5 rounded-full blur-[100px] pointer-events-none"></div>
+      {/* Left Column: Branding / Info */}
+      <div className="w-full lg:w-[55%] flex flex-col justify-between p-4 sm:p-8 lg:p-16 relative overflow-hidden min-h-[auto] lg:min-h-screen">
+        {/* Glow backdrop effects */}
+        <div className="absolute top-[-10%] left-[-10%] w-72 sm:w-96 h-72 sm:h-96 bg-[#D4AF37]/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-[10%] right-[-10%] w-64 sm:w-80 h-64 sm:h-80 bg-[#3EC6C0]/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-        {}
+        {/* Top bar logo */}
         <div className="relative z-10 flex items-center gap-3">
           <img
             src="https://res.cloudinary.com/ecxs6pgw/image/upload/v1783354359/logo_acvlmj.png"
             alt="Chain Hook Logo"
-            className="h-9 w-auto object-contain"
+            className="h-8 sm:h-9 w-auto object-contain"
           />
-          <div className="h-6 w-[1px] bg-zinc-800"></div>
-          <span className="text-xs uppercase tracking-widest text-zinc-400 font-medium">Chain Hook Wallet</span>
+          <div className="h-5 sm:h-6 w-[1px] bg-zinc-800"></div>
+          <span className="text-[10px] sm:text-xs uppercase tracking-widest text-zinc-400 font-medium truncate">Chain Hook Wallet</span>
         </div>
 
-        {}
-        <div className="relative z-10 my-auto py-12 max-w-xl space-y-6">
+        {/* Hero Copy */}
+        <div className="relative z-10 my-auto py-6 sm:py-12 max-w-xl space-y-4 sm:space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-800 text-[11px] text-zinc-300"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-800 text-[10px] sm:text-[11px] text-zinc-300"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             System Online: v2.4.1 Secure Gateway
@@ -136,7 +135,7 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-tight"
+            className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-tight"
           >
             The new standard for <br />
             <span className="bg-gradient-to-r from-[#D4AF37] via-[#F3D77A] to-[#3EC6C0] bg-clip-text text-transparent">digital asset management</span>.
@@ -146,12 +145,12 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-sm text-zinc-400 leading-relaxed font-light"
+            className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light"
           >
             Manage multi-currency ledger balances, issue secure payment authorizations, and deploy merchant sandbox simulations with global compliance baked right into the protocol.
           </motion.p>
 
-          {}
+          {/* Pillars: shown on lg screens */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -162,14 +161,14 @@ export default function LoginPage({ onLogin, oauthNotice, clientId }: LoginPageP
           </motion.div>
         </div>
 
-        {}
+        {/* Bottom footer: stats */}
         <div className="relative z-10 border-t border-zinc-900 pt-6 hidden lg:flex">
           <StatsRow />
         </div>
       </div>
 
-      {}
-      <div className="w-full lg:w-[45%] flex items-center justify-center p-8 lg:p-12 bg-[#08080C] border-t lg:border-t-0 lg:border-l border-zinc-900/60 relative z-10">
+      {/* Right Column: Authentication Card */}
+      <div className="w-full lg:w-[45%] flex items-center justify-center p-4 sm:p-8 lg:p-12 bg-[#08080C] border-t lg:border-t-0 lg:border-l border-zinc-900/60 relative z-10">
         <div className="absolute top-[30%] right-[-10%] w-72 h-72 bg-[#3EC6C0]/5 rounded-full blur-[90px] pointer-events-none"></div>
 
         <motion.div

@@ -18,14 +18,14 @@ export default function AnalyticsTable() {
   }
 
   return (
-    <div className="glass p-6 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
-      <div className="flex justify-between items-center mb-6">
+    <div className="glass p-4 sm:p-6 rounded-2xl border border-[#1C1C24] hover:border-[#D4AF37]/30 transition-all duration-300">
+      <div className="flex flex-wrap justify-between items-center gap-2 mb-4 sm:mb-6">
         <div>
             <h3 className="text-[10px] uppercase text-[#9A9AA5] tracking-wider">Comprehensive Analytics</h3>
             <p className="text-[10px] text-[#52525B]">Performance metrics based on the selected timeframe analysis.</p>
         </div>
         <select 
-          className="bg-[#0D0D12] border border-[#27272A] rounded-lg px-3 py-1 text-[10px] text-white focus:outline-none focus:border-[#D4AF37]/50"
+          className="bg-[#0D0D12] border border-[#27272A] rounded-lg px-2.5 py-1 text-[10px] text-white focus:outline-none focus:border-[#D4AF37]/50"
           value={timeframe}
           onChange={(e) => setTimeframe(e.target.value)}
         >
@@ -34,8 +34,8 @@ export default function AnalyticsTable() {
           <option>YTD</option>
         </select>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-[11px]">
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full text-left text-[11px] min-w-[460px]">
           <thead>
             <tr className="text-[#9A9AA5]">
               <th className="pb-3 pl-2">Metric</th>
@@ -51,17 +51,17 @@ export default function AnalyticsTable() {
               const Icon = d.icon;
               return (
                 <tr key={i} className="border-b border-[#1C1C24] hover:bg-[#D4AF37]/5 transition-colors">
-                  <td className="py-3 pl-2 flex items-center gap-3">
-                    <div className="p-1.5 rounded-lg bg-[#1C1C24] text-[#D4AF37]">
+                  <td className="py-3 pl-2 flex items-center gap-3 font-medium whitespace-nowrap">
+                    <div className="p-1.5 rounded-lg bg-[#1C1C24] text-[#D4AF37] shrink-0">
                         <Icon size={14} />
                     </div>
                     {d.metric}
                   </td>
-                  <td className="py-3 font-semibold">{d.value}</td>
-                  <td className={`py-3 ${d.status === 'Healthy' ? 'text-[#3EC6C0]' : 'text-[#FF6B6B]'}`}>{d.status}</td>
-                  <td className="py-3">{d.trend}</td>
-                  <td className="py-3">{d.source}</td>
-                  <td className={`py-3 pr-2 text-right font-medium ${d.change.startsWith('+') ? 'text-[#3EC6C0]' : 'text-[#FF6B6B]'}`}>
+                  <td className="py-3 font-semibold whitespace-nowrap">{d.value}</td>
+                  <td className={`py-3 whitespace-nowrap ${d.status === 'Healthy' ? 'text-[#3EC6C0]' : 'text-[#FF6B6B]'}`}>{d.status}</td>
+                  <td className="py-3 whitespace-nowrap">{d.trend}</td>
+                  <td className="py-3 whitespace-nowrap">{d.source}</td>
+                  <td className={`py-3 pr-2 text-right font-medium whitespace-nowrap ${d.change.startsWith('+') ? 'text-[#3EC6C0]' : 'text-[#FF6B6B]'}`}>
                     {d.change}
                   </td>
                 </tr>

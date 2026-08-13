@@ -84,12 +84,12 @@ export default function QuickActions() {
   };
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-[#1C1C24]/30 border border-[#27272A] rounded-2xl relative" ref={containerRef}>
-      <div className="relative flex-grow">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 p-3 bg-[#1C1C24]/30 border border-[#27272A] rounded-2xl relative" ref={containerRef}>
+      <div className="relative flex-grow min-w-0">
         <Search className="absolute left-3 top-2.5 text-[#52525B]" size={16} />
         <input
           type="text"
-          placeholder="Search features, pages, components..."
+          placeholder="Search features, pages..."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -118,7 +118,7 @@ export default function QuickActions() {
                   <p className="text-[11px] font-semibold text-white truncate">{item.name}</p>
                   <p className="text-[9px] text-[#71717A] truncate">{item.desc}</p>
                 </div>
-                <span className="text-[8px] uppercase tracking-wider text-zinc-500 font-bold px-1.5 py-0.5 bg-zinc-800/40 rounded border border-zinc-700/30">
+                <span className="text-[8px] uppercase tracking-wider text-zinc-500 font-bold px-1.5 py-0.5 bg-zinc-800/40 rounded border border-zinc-700/30 shrink-0">
                   {item.category}
                 </span>
               </div>
@@ -127,20 +127,21 @@ export default function QuickActions() {
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex items-center justify-between sm:justify-start gap-2 shrink-0">
         {[
-          { label: 'Send', icon: <Send size={15} /> },
-          { label: 'Request', icon: <ArrowDownToLine size={15} /> },
-          { label: 'Top-up', icon: <Plus size={15} /> },
-          { label: 'More', icon: <MoreHorizontal size={15} /> },
+          { label: 'Send', icon: <Send size={14} /> },
+          { label: 'Request', icon: <ArrowDownToLine size={14} /> },
+          { label: 'Top-up', icon: <Plus size={14} /> },
+          { label: 'More', icon: <MoreHorizontal size={14} /> },
         ].map((action) => (
           <button
             key={action.label}
             onClick={() => handleAction(action.label)}
-            className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#1C1C24] border border-[#27272A] text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/50 transition-all duration-300 shadow-sm"
+            className="flex-1 sm:flex-none h-9 px-2.5 sm:px-3 flex items-center justify-center gap-1.5 rounded-xl bg-[#1C1C24] border border-[#27272A] text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/50 transition-all duration-300 shadow-sm text-xs font-semibold"
             title={action.label}
           >
             {action.icon}
+            <span className="inline sm:hidden lg:inline text-[10px]">{action.label}</span>
           </button>
         ))}
       </div>
