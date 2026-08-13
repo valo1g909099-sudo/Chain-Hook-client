@@ -28,7 +28,7 @@ export default function Sidebar({ onLogout }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-[80px] bg-[#0D0D0F] border-r border-[#1F1F23] flex-col items-center py-8 shrink-0 h-screen sticky top-0">
+      <aside className="hidden md:flex w-[80px] bg-[#0D0D0F] border-r border-[#1F1F23] flex-col items-center py-8 shrink-0 h-full">
         <div className="mb-10">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center">
             <img src={Logo} alt="Chain Hook Logo" />
