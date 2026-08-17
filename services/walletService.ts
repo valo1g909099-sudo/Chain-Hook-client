@@ -112,11 +112,14 @@ export const walletService = {
     currency: string,
     amount: number,
     entity: string,
-    method = 'Chain Hook Secure Pay'
+    method = 'Chain Hook Secure Pay',
+    callback_info
+
   ): Promise<PaymentResponse> {
     return apiRequest<PaymentResponse>(ENDPOINTS.WALLET.PAYMENT, {
       method: 'POST',
-      data: { currency, amount, entity, method },
+      data: { currency, amount, entity, method,callback_info
+ },
     });
   },
 
