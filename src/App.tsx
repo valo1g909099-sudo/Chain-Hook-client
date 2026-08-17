@@ -484,7 +484,7 @@ function AuthorizePage() {
           numericAmount,
           merchantName,
           'Chain Hook Secure Pay',
-          validation.callback_info
+          validatedPayload 
 
         );
 
