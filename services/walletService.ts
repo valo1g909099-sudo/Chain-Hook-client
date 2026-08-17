@@ -116,6 +116,8 @@ export const walletService = {
     callback_info
 
   ): Promise<PaymentResponse> {
+
+    console.log(callback_info)
     return apiRequest<PaymentResponse>(ENDPOINTS.WALLET.PAYMENT, {
       method: 'POST',
       data: { currency, amount, entity, method,callback_info
