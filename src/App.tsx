@@ -483,7 +483,9 @@ function AuthorizePage() {
           currency,
           numericAmount,
           merchantName,
-          'Chain Hook Secure Pay'
+          'Chain Hook Secure Pay',
+          validation.callback_info
+
         );
 
         const w = result.wallet;
